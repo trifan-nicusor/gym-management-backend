@@ -1,11 +1,7 @@
 package com.gymmanagement.security.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.gymmanagement.security.token.Token;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +30,11 @@ public class User implements UserDetails {
     private UserRole role;
     private boolean isLocked;
     private boolean isEnabled;
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL
+    )
+    private List<Token> tokenList;
 
     public User(String email,
                 String password,
