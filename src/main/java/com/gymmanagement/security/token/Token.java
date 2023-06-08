@@ -1,7 +1,13 @@
 package com.gymmanagement.security.token;
 
 import com.gymmanagement.security.user.User;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,8 +27,6 @@ public class Token {
     private String token;
     private boolean isRevoked;
     private boolean isExpired;
-    @Enumerated(EnumType.STRING)
-    private TokenType tokenType = TokenType.BEARER;
     @ManyToOne
     @JoinColumn(
             nullable = false,
