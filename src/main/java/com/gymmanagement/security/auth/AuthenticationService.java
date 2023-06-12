@@ -2,6 +2,7 @@ package com.gymmanagement.security.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gymmanagement.security.config.JwtService;
+import com.gymmanagement.security.email.EmailValidator;
 import com.gymmanagement.security.token.Token;
 import com.gymmanagement.security.token.TokenRepository;
 import com.gymmanagement.security.user.UserRepository;
@@ -15,7 +16,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 
 @Service
@@ -27,8 +27,9 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
+    private final EmailValidator emailValidator;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public void register(RegisterRequest request) {
         var user = User.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -40,14 +41,8 @@ public class AuthenticationService {
 
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
 
         saveUserToken(savedUser, jwtToken);
-
-        return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -120,8 +115,18 @@ public class AuthenticationService {
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)
                         .build();
+
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
         }
+    }
+
+    public boolean userExists(String email) {
+        return userRepository.findByEmail(email).isPresent();
+
+    }
+
+    public boolean isEmailValid(String email) {
+        return emailValidator.test(email);
     }
 }
