@@ -30,6 +30,7 @@ jwt:
   secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
 
 email-regex: "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"
+
 server:
   error:
     include-message: always
