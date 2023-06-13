@@ -20,25 +20,19 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
-        String requestEmail = request.getEmail();
+        boolean isEmailInvalid = authService.userExists(request.getEmail()) || !authService.isEmailValid(request.getEmail());
 
-        if (authService.userExists(requestEmail)) {
-            return new ResponseEntity<>("Email already taken!", HttpStatus.BAD_REQUEST);
-        } else if (!authService.isEmailValid(requestEmail)) {
-            return new ResponseEntity<>("Invalid mail format!", HttpStatus.BAD_REQUEST);
-        } else {
-            authService.register(request);
-            return new ResponseEntity<>("User successfully registered!", HttpStatus.CREATED);
+        if (isEmailInvalid) {
+            return new ResponseEntity<>("Email is already taken or has an invalid format!", HttpStatus.BAD_REQUEST);
         }
+
+        authService.register(request);
+        return new ResponseEntity<>("User successfully registered!", HttpStatus.CREATED);
     }
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        if(HttpStatus.OK.is2xxSuccessful()){
-            return new ResponseEntity<>(authService.authenticate(request), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return ResponseEntity.ok(authService.authenticate(request));
     }
 
     @PostMapping("/refresh-token")
