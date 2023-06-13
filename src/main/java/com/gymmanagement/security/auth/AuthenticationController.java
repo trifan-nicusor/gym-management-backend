@@ -28,14 +28,17 @@ public class AuthenticationController {
             return new ResponseEntity<>("Invalid mail format!", HttpStatus.BAD_REQUEST);
         } else {
             authService.register(request);
-
-            return new ResponseEntity<>("User successfully registered!", HttpStatus.OK);
+            return new ResponseEntity<>("User successfully registered!", HttpStatus.CREATED);
         }
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request) {
-        return ResponseEntity.ok(authService.authenticate(request));
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+        if(HttpStatus.OK.is2xxSuccessful()){
+            return new ResponseEntity<>(authService.authenticate(request), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/refresh-token")

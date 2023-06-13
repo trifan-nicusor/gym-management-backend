@@ -45,9 +45,7 @@ public class JwtService {
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
-    public String generateRefreshToken(
-            UserDetails userDetails
-    ) {
+    public String generateRefreshToken(UserDetails userDetails) {
         return buildToken(new HashMap<>(), userDetails, refreshExpiration);
     }
 
@@ -66,7 +64,6 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
@@ -85,7 +82,6 @@ public class JwtService {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-
     }
 
     private Key getSignInKey() {
