@@ -23,7 +23,6 @@ spring:
           timeout: 3000
           write timeout: 5000
 
-
 jwt:
   expiration: 86400000 # 1 day
   refreshExpiration: 604800000 # 7 days
