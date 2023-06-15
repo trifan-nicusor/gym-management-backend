@@ -23,7 +23,6 @@ spring:
           timeout: 3000
           write timeout: 5000
 
-
 # jwt properties
 jwt:
   expiration: 86400000 # 1 day
