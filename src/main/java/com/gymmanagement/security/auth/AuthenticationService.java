@@ -2,13 +2,16 @@ package com.gymmanagement.security.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gymmanagement.security.config.JwtService;
+import com.gymmanagement.security.email.EmailSender;
 import com.gymmanagement.security.email.EmailValidator;
+import com.gymmanagement.security.emailbuilder.EmailBuilderService;
 import com.gymmanagement.security.token.Token;
 import com.gymmanagement.security.token.TokenRepository;
 import com.gymmanagement.security.user.UserRepository;
 import com.gymmanagement.security.user.UserRole;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.gymmanagement.security.user.User;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,8 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
     private final EmailValidator emailValidator;
+    private final EmailBuilderService emailBuilderService;
+    private final EmailSender emailSender;
 
     public void register(RegisterRequest request) {
         var user = User.builder()
@@ -36,26 +42,42 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(UserRole.USER)
-                .isEnabled(true)
+                .isEnabled(false)
                 .build();
 
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
 
         saveUserToken(savedUser, jwtToken);
+        sendConfirmationEmail(user);
+    }
+
+    private void sendConfirmationEmail(User user) {
+        String email = user.getEmail();
+        String link = "http://localhost:8080/api/v1/auth/confirm-account?email=" + email;
+
+        emailSender.send(email, emailBuilderService.confirmationEmailBuilder(user.getFirstName(), link));
+    }
+
+    @Transactional
+    public void confirmAccount(String email) {
+        var user = userRepository.findByEmail(email).orElseThrow();
+
+        user.setConfirmedAt(LocalDateTime.now());
+        enableUser(email);
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
-
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
 
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
@@ -128,10 +150,13 @@ public class AuthenticationService {
 
     public boolean userExists(String email) {
         return userRepository.findByEmail(email).isPresent();
-
     }
 
     public boolean isEmailValid(String email) {
         return emailValidator.test(email);
+    }
+
+    private void enableUser(String email) {
+        userRepository.enableUser(email);
     }
 }
