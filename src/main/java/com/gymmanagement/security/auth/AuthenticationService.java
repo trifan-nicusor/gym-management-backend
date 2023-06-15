@@ -3,12 +3,12 @@ package com.gymmanagement.security.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gymmanagement.security.config.JwtService;
 import com.gymmanagement.security.email.EmailSender;
-import com.gymmanagement.security.email.EmailValidator;
 import com.gymmanagement.security.emailbuilder.EmailBuilderService;
 import com.gymmanagement.security.token.Token;
 import com.gymmanagement.security.token.TokenRepository;
 import com.gymmanagement.security.user.UserRepository;
 import com.gymmanagement.security.user.UserRole;
+import com.gymmanagement.security.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -31,9 +31,9 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
-    private final EmailValidator emailValidator;
     private final EmailBuilderService emailBuilderService;
     private final EmailSender emailSender;
+    private final UserService userService;
 
     public void register(RegisterRequest request) {
         var user = User.builder()
@@ -64,7 +64,7 @@ public class AuthenticationService {
         var user = userRepository.findByEmail(email).orElseThrow();
 
         user.setConfirmedAt(LocalDateTime.now());
-        enableUser(email);
+        userService.enableUser(email);
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -146,17 +146,5 @@ public class AuthenticationService {
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
         }
-    }
-
-    public boolean userExists(String email) {
-        return userRepository.findByEmail(email).isPresent();
-    }
-
-    public boolean isEmailValid(String email) {
-        return emailValidator.test(email);
-    }
-
-    private void enableUser(String email) {
-        userRepository.enableUser(email);
     }
 }

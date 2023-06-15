@@ -1,5 +1,6 @@
 package com.gymmanagement.security.user;
 
+import com.gymmanagement.security.email.EmailValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,6 +14,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailValidator emailValidator;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -25,5 +27,17 @@ public class UserService implements UserDetailsService {
 
     public boolean checkIfPasswordMatches(UserDetails user, String currentPassword) {
         return passwordEncoder.matches(currentPassword, user.getPassword());
+    }
+
+    public boolean userExists(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
+    public boolean isEmailValid(String email) {
+        return emailValidator.test(email);
+    }
+
+    public void enableUser(String email) {
+        userRepository.enableUser(email);
     }
 }

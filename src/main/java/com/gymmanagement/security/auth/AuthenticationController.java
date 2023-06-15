@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.io.IOException;
 import java.util.Objects;
 
@@ -29,7 +28,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
-        boolean isEmailInvalid = authService.userExists(request.getEmail()) || !authService.isEmailValid(request.getEmail());
+        boolean isEmailInvalid = userService.userExists(request.getEmail()) || !userService.isEmailValid(request.getEmail());
 
         if (isEmailInvalid) {
             return new ResponseEntity<>("Email is already taken or has an invalid format!", HttpStatus.BAD_REQUEST);
@@ -42,7 +41,7 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
 
-        if (authService.userExists(request.getEmail())) {
+        if (userService.userExists(request.getEmail())) {
             return ResponseEntity.ok(authService.authenticate(request));
         }
 
