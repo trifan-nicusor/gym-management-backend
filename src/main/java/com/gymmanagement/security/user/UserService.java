@@ -7,8 +7,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
@@ -27,9 +25,5 @@ public class UserService implements UserDetailsService {
 
     public boolean checkIfPasswordMatches(UserDetails user, String currentPassword) {
         return passwordEncoder.matches(currentPassword, user.getPassword());
-    }
-
-    public Optional<User> loadByEmail(String email) {
-        return userRepository.findByEmail(email);
     }
 }

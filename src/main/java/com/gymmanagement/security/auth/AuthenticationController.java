@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -41,7 +42,7 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
 
-        if(userService.loadByEmail(request.getEmail()).isPresent()){
+        if (authService.userExists(request.getEmail())) {
             return ResponseEntity.ok(authService.authenticate(request));
         }
 
