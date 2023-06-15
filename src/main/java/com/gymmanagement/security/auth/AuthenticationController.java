@@ -40,7 +40,12 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        return ResponseEntity.ok(authService.authenticate(request));
+
+        if(userService.loadByEmail(request.getEmail()).isPresent()){
+            return ResponseEntity.ok(authService.authenticate(request));
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/confirm-account")
