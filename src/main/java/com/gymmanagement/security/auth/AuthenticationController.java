@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.io.IOException;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -54,11 +56,17 @@ public class AuthenticationController {
     }
 
     @PatchMapping("/change-password")
-    public void changePassword(
-            @RequestParam("password") String password,
-            @RequestParam("oldPassword") String oldPassword) {
+    public ResponseEntity<String> changePassword(
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("currentPassword") String currentPassword) {
         UserDetails user = userService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        userService.changePassword(user, password, oldPassword);
+        if (userService.checkIfPasswordMatches(user, currentPassword) && !Objects.equals(currentPassword, newPassword)) {
+            userService.changePassword(user, newPassword);
+            return ResponseEntity.ok("Password successfully changed!");
+        }
+
+        System.out.println("ceva");
+        return ResponseEntity.badRequest().build();
     }
 }

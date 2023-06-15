@@ -19,11 +19,11 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email).orElseThrow();
     }
 
-    public void changePassword(UserDetails user, String password, String oldPassword) {
-        boolean checkIfPasswordMatches = passwordEncoder.matches(oldPassword, user.getPassword());
+    public void changePassword(UserDetails user, String password) {
+        userRepository.updatePassword(user.getUsername(), passwordEncoder.encode(password));
+    }
 
-        if(checkIfPasswordMatches) {
-            userRepository.updatePassword(user.getUsername(), passwordEncoder.encode(password));
-        }
+    public boolean checkIfPasswordMatches(UserDetails user, String currentPassword) {
+        return passwordEncoder.matches(currentPassword, user.getPassword());
     }
 }
