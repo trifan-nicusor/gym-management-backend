@@ -1,12 +1,20 @@
 package com.gymmanagement.security.auth;
 
+import com.gymmanagement.security.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 @RestController
@@ -15,6 +23,7 @@ import java.io.IOException;
 public class AuthenticationController {
 
     private final AuthenticationService authService;
+    private final UserService userService;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
@@ -42,5 +51,14 @@ public class AuthenticationController {
     public void refreshToken(HttpServletRequest request,
                              HttpServletResponse response) throws IOException {
         authService.refreshToken(request, response);
+    }
+
+    @PatchMapping("/change-password")
+    public void changePassword(
+            @RequestParam("password") String password,
+            @RequestParam("oldPassword") String oldPassword) {
+        UserDetails user = userService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        userService.changePassword(user, password, oldPassword);
     }
 }
