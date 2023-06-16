@@ -61,10 +61,15 @@ public class AuthenticationController {
     }
 
     @PostMapping("/resend-confirmation-email")
-    public void resendConfirmationEmail(@RequestBody EmailRequest request) {
+    public ResponseEntity<String> resendConfirmationEmail(@RequestBody EmailRequest request) {
         User user = userService.loadByEmail(request.getEmail()).orElseThrow();
 
+        if (user.getConfirmedAt() != null) {
+            return new ResponseEntity<>("User already confirmed!", HttpStatus.BAD_REQUEST);
+        }
+
         authService.sendConfirmationEmail(user);
+        return new ResponseEntity<>("A new confirmation email has been sent!", HttpStatus.OK);
     }
 
     @PostMapping("/authenticate")
