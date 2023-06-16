@@ -1,4 +1,4 @@
-package com.gymmanagement.security.resettoken;
+package com.gymmanagement.security.token.reset;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

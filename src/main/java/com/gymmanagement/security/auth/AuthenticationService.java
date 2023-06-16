@@ -7,6 +7,8 @@ import com.gymmanagement.security.emailbuilder.EmailBuilderService;
 import com.gymmanagement.security.request.RegisterRequest;
 import com.gymmanagement.security.token.Token;
 import com.gymmanagement.security.token.TokenRepository;
+import com.gymmanagement.security.token.confirmation.ConfirmationToken;
+import com.gymmanagement.security.token.confirmation.ConfirmationTokenRepository;
 import com.gymmanagement.security.user.UserRepository;
 import com.gymmanagement.security.user.UserRole;
 import com.gymmanagement.security.user.UserService;
@@ -23,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +36,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
+    private final ConfirmationTokenRepository confirmationTokenRepository;
     private final EmailBuilderService emailBuilderService;
     private final EmailSender emailSender;
     private final UserService userService;
@@ -57,11 +61,9 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public void confirmAccount(String email) {
-        var user = userRepository.findByEmail(email).orElseThrow();
-
+    public void confirmAccount(User user) {
         user.setConfirmedAt(LocalDateTime.now());
-        userService.enableUser(email);
+        userService.enableUser(user.getEmail());
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -120,10 +122,19 @@ public class AuthenticationService {
     }
 
     private void sendConfirmationEmail(User user) {
-        String email = user.getEmail();
-        String link = domain + "/api/v1/auth/confirm-account?email=" + email;
+        String token = UUID.randomUUID().toString();
+        String link = domain + "/api/v1/auth/confirm-account?confirmationToken=" + token;
 
-        emailSender.send(email, emailBuilderService.confirmationEmailBuilder(user.getFirstName(), link));
+        var buildToken = ConfirmationToken.builder()
+                .token(token)
+                .createdAt(LocalDateTime.now())
+                .expiresAt(LocalDateTime.now().plusMinutes(15))
+                .user(user)
+                .build();
+
+        confirmationTokenRepository.save(buildToken);
+
+        emailSender.send(user.getEmail(), emailBuilderService.confirmationEmailBuilder(user.getFirstName(), link));
     }
 
     private void revokeAllUserTokens(User user) {

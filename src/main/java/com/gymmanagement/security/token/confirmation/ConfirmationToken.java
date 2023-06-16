@@ -1,4 +1,4 @@
-package com.gymmanagement.security.resettoken;
+package com.gymmanagement.security.token.confirmation;
 
 import com.gymmanagement.security.user.User;
 import jakarta.persistence.Column;
@@ -18,8 +18,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "reset_token")
-public class ResetToken {
+@Entity(name = "confirmation_token")
+public class ConfirmationToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

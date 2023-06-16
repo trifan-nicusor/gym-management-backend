@@ -4,6 +4,8 @@ import com.gymmanagement.security.request.EmailRequest;
 import com.gymmanagement.security.request.PasswordRequest;
 import com.gymmanagement.security.request.RegisterRequest;
 import com.gymmanagement.security.request.ResetRequest;
+import com.gymmanagement.security.token.confirmation.ConfirmationTokenService;
+import com.gymmanagement.security.user.User;
 import com.gymmanagement.security.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,6 +30,7 @@ import java.util.Objects;
 public class AuthenticationController {
 
     private final AuthenticationService authService;
+    private final ConfirmationTokenService confirmationTokenService;
     private final UserService userService;
 
     @PostMapping("/register")
@@ -43,8 +46,15 @@ public class AuthenticationController {
     }
 
     @GetMapping("/confirm-account")
-    public void confirmAccount(@RequestBody EmailRequest request) {
-        authService.confirmAccount(request.getEmail());
+    public ResponseEntity<String> confirmAccount(@RequestParam("confirmationToken") String token) {
+        User user = confirmationTokenService.findByToken(token).orElseThrow().getUser();
+
+        if (userService.userExists(user.getEmail())) {
+            authService.confirmAccount(user);
+            return new ResponseEntity<>("User successfully confirmed!", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("User not found!", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/authenticate")

@@ -1,6 +1,6 @@
 package com.gymmanagement.security.user;
 
-import com.gymmanagement.security.resettoken.ResetToken;
+import com.gymmanagement.security.token.reset.ResetToken;
 import com.gymmanagement.security.token.Token;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
