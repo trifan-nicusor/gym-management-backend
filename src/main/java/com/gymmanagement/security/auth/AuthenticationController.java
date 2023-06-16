@@ -4,6 +4,7 @@ import com.gymmanagement.security.request.EmailRequest;
 import com.gymmanagement.security.request.PasswordRequest;
 import com.gymmanagement.security.request.RegisterRequest;
 import com.gymmanagement.security.request.ResetRequest;
+import com.gymmanagement.security.token.confirmation.ConfirmationToken;
 import com.gymmanagement.security.token.confirmation.ConfirmationTokenService;
 import com.gymmanagement.security.user.User;
 import com.gymmanagement.security.user.UserService;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @RestController
@@ -47,14 +49,15 @@ public class AuthenticationController {
 
     @GetMapping("/confirm-account")
     public ResponseEntity<String> confirmAccount(@RequestParam("confirmationToken") String token) {
-        User user = confirmationTokenService.findByToken(token).orElseThrow().getUser();
+        ConfirmationToken confirmationToken = confirmationTokenService.findByToken(token).orElseThrow();
+        User user = confirmationToken.getUser();
 
-        if (userService.userExists(user.getEmail())) {
+        if (userService.userExists(user.getEmail()) && !confirmationToken.getExpiresAt().isBefore(LocalDateTime.now())) {
             authService.confirmAccount(user);
             return new ResponseEntity<>("User successfully confirmed!", HttpStatus.OK);
         }
 
-        return new ResponseEntity<>("User not found!", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("User not found or the token is expired!", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/authenticate")
