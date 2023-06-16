@@ -1,4 +1,4 @@
-package com.gymmanagement.security.emailbuilder;
+package com.gymmanagement.security.email.builder;
 
 public interface EmailBuilder {
     String confirmationEmailBuilder(String name, String link);

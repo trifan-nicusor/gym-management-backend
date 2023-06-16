@@ -2,7 +2,7 @@ package com.gymmanagement.security.user;
 
 import com.gymmanagement.security.email.EmailSender;
 import com.gymmanagement.security.email.EmailValidator;
-import com.gymmanagement.security.emailbuilder.EmailBuilderService;
+import com.gymmanagement.security.email.builder.EmailBuilderService;
 import com.gymmanagement.security.token.reset.ResetToken;
 import com.gymmanagement.security.token.reset.ResetTokenRepository;
 import lombok.RequiredArgsConstructor;

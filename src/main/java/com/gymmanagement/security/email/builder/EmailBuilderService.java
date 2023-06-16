@@ -1,4 +1,4 @@
-package com.gymmanagement.security.emailbuilder;
+package com.gymmanagement.security.email.builder;
 
 import org.springframework.stereotype.Service;
 

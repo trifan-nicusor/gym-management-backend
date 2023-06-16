@@ -3,7 +3,7 @@ package com.gymmanagement.security.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gymmanagement.security.config.JwtService;
 import com.gymmanagement.security.email.EmailSender;
-import com.gymmanagement.security.emailbuilder.EmailBuilderService;
+import com.gymmanagement.security.email.builder.EmailBuilderService;
 import com.gymmanagement.security.request.RegisterRequest;
 import com.gymmanagement.security.token.Token;
 import com.gymmanagement.security.token.TokenRepository;
