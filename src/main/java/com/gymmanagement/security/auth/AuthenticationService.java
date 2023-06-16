@@ -52,13 +52,6 @@ public class AuthenticationService {
         sendConfirmationEmail(user);
     }
 
-    private void sendConfirmationEmail(User user) {
-        String email = user.getEmail();
-        String link = "http://localhost:8080/api/v1/auth/confirm-account?email=" + email;
-
-        emailSender.send(email, emailBuilderService.confirmationEmailBuilder(user.getFirstName(), link));
-    }
-
     @Transactional
     public void confirmAccount(String email) {
         var user = userRepository.findByEmail(email).orElseThrow();
@@ -86,32 +79,6 @@ public class AuthenticationService {
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
-    }
-
-    private void saveUserToken(User user, String jwtToken) {
-        var token = Token.builder()
-                .user(user)
-                .token(jwtToken)
-                .isExpired(false)
-                .isRevoked(false)
-                .build();
-
-        tokenRepository.save(token);
-    }
-
-    private void revokeAllUserTokens(User user) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
-
-        if (validUserTokens.isEmpty()) {
-            return;
-        }
-
-        validUserTokens.forEach(token -> {
-            token.setExpired(true);
-            token.setRevoked(true);
-        });
-
-        tokenRepository.saveAll(validUserTokens);
     }
 
     public void refreshToken(
@@ -146,5 +113,38 @@ public class AuthenticationService {
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
             }
         }
+    }
+
+    private void sendConfirmationEmail(User user) {
+        String email = user.getEmail();
+        String link = "http://localhost:8080/api/v1/auth/confirm-account?email=" + email;
+
+        emailSender.send(email, emailBuilderService.confirmationEmailBuilder(user.getFirstName(), link));
+    }
+
+    private void revokeAllUserTokens(User user) {
+        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+
+        if (validUserTokens.isEmpty()) {
+            return;
+        }
+
+        validUserTokens.forEach(token -> {
+            token.setExpired(true);
+            token.setRevoked(true);
+        });
+
+        tokenRepository.saveAll(validUserTokens);
+    }
+
+    private void saveUserToken(User user, String jwtToken) {
+        var token = Token.builder()
+                .user(user)
+                .token(jwtToken)
+                .isExpired(false)
+                .isRevoked(false)
+                .build();
+
+        tokenRepository.save(token);
     }
 }
