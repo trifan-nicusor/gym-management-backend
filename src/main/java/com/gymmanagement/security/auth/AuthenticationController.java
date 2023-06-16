@@ -3,6 +3,7 @@ package com.gymmanagement.security.auth;
 import com.gymmanagement.security.request.EmailRequest;
 import com.gymmanagement.security.request.PasswordRequest;
 import com.gymmanagement.security.request.RegisterRequest;
+import com.gymmanagement.security.request.ResetRequest;
 import com.gymmanagement.security.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -61,7 +64,7 @@ public class AuthenticationController {
         authService.refreshToken(request, response);
     }
 
-    @PatchMapping("/change-password")
+    @PatchMapping("/update-password")
     public ResponseEntity<String> changePassword(@RequestBody PasswordRequest request) {
         UserDetails user = userService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
@@ -75,6 +78,12 @@ public class AuthenticationController {
 
     @PatchMapping("/forgot-password")
     public void forgotPassword(@RequestBody EmailRequest request) {
+        userService.sendPasswordResetEmail(request.getEmail());
+    }
 
+    @PatchMapping("/reset-password")
+    public void restPassword(@RequestParam("resetToken") String token,
+                                     @RequestBody ResetRequest request) {
+        userService.resetPassword(token, request.getPassword());
     }
 }
