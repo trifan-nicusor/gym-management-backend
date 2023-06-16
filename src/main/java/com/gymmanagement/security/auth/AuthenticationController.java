@@ -1,5 +1,8 @@
 package com.gymmanagement.security.auth;
 
+import com.gymmanagement.security.request.EmailRequest;
+import com.gymmanagement.security.request.PasswordRequest;
+import com.gymmanagement.security.request.RegisterRequest;
 import com.gymmanagement.security.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,7 +16,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.Objects;
@@ -38,6 +40,11 @@ public class AuthenticationController {
         return new ResponseEntity<>("User successfully registered!", HttpStatus.CREATED);
     }
 
+    @GetMapping("/confirm-account")
+    public void confirmAccount(@RequestBody EmailRequest request) {
+        authService.confirmAccount(request.getEmail());
+    }
+
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
 
@@ -48,11 +55,6 @@ public class AuthenticationController {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/confirm-account")
-    public void confirmAccount(@RequestParam("email") String email) {
-        authService.confirmAccount(email);
-    }
-
     @PostMapping("/refresh-token")
     public void refreshToken(HttpServletRequest request,
                              HttpServletResponse response) throws IOException {
@@ -60,16 +62,19 @@ public class AuthenticationController {
     }
 
     @PatchMapping("/change-password")
-    public ResponseEntity<String> changePassword(
-            @RequestParam("newPassword") String newPassword,
-            @RequestParam("currentPassword") String currentPassword) {
+    public ResponseEntity<String> changePassword(@RequestBody PasswordRequest request) {
         UserDetails user = userService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        if (userService.checkIfPasswordMatches(user, currentPassword) && !Objects.equals(currentPassword, newPassword)) {
-            userService.changePassword(user, newPassword);
+        if (userService.checkIfPasswordMatches(user, request.getCurrentPassword()) && !Objects.equals(request.getCurrentPassword(), request.getNewPassword())) {
+            userService.changePassword(user, request.getNewPassword());
             return ResponseEntity.ok("Password successfully changed!");
         }
 
         return ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/forgot-password")
+    public void forgotPassword(@RequestBody EmailRequest request) {
+
     }
 }

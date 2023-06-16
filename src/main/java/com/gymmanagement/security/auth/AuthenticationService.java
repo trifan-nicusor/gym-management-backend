@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gymmanagement.security.config.JwtService;
 import com.gymmanagement.security.email.EmailSender;
 import com.gymmanagement.security.emailbuilder.EmailBuilderService;
+import com.gymmanagement.security.request.RegisterRequest;
 import com.gymmanagement.security.token.Token;
 import com.gymmanagement.security.token.TokenRepository;
 import com.gymmanagement.security.user.UserRepository;

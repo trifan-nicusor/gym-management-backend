@@ -1,4 +1,4 @@
-package com.gymmanagement.security.auth;
+package com.gymmanagement.security.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
