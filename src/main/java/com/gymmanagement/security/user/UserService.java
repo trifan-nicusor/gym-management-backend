@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -33,6 +34,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email).orElseThrow();
     }
 
+    public Optional<User> loadByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     public void changePassword(UserDetails user, String password) {
         userRepository.updatePassword(user.getUsername(), passwordEncoder.encode(password));
     }
@@ -42,7 +47,7 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean userExists(String email) {
-        return userRepository.findByEmail(email).isPresent();
+        return this.loadByEmail(email).isPresent();
     }
 
     public boolean isEmailValid(String email) {

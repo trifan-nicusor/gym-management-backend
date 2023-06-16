@@ -60,6 +60,13 @@ public class AuthenticationController {
         return new ResponseEntity<>("User not found or the token is expired!", HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping("/resend-confirmation-email")
+    public void resendConfirmationEmail(@RequestBody EmailRequest request) {
+        User user = userService.loadByEmail(request.getEmail()).orElseThrow();
+
+        authService.sendConfirmationEmail(user);
+    }
+
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
 

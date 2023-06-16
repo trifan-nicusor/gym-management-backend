@@ -23,6 +23,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -121,7 +122,7 @@ public class AuthenticationService {
         }
     }
 
-    private void sendConfirmationEmail(User user) {
+    public void sendConfirmationEmail(User user) {
         String token = UUID.randomUUID().toString();
         String link = domain + "/api/v1/auth/confirm-account?confirmationToken=" + token;
 
@@ -133,7 +134,6 @@ public class AuthenticationService {
                 .build();
 
         confirmationTokenRepository.save(buildToken);
-
         emailSender.send(user.getEmail(), emailBuilderService.confirmationEmailBuilder(user.getFirstName(), link));
     }
 
