@@ -1,5 +1,6 @@
 package com.gymmanagement.security.user;
 
+import com.gymmanagement.security.token.confirmation.ConfirmationToken;
 import com.gymmanagement.security.token.reset.ResetToken;
 import com.gymmanagement.security.token.Token;
 import jakarta.persistence.CascadeType;
@@ -50,6 +51,11 @@ public class User implements UserDetails {
             cascade = CascadeType.ALL
     )
     private List<ResetToken> resetTokenList;
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL
+    )
+    private List<ConfirmationToken> confirmationTokenList;
 
     public User(String email,
                 String password,
