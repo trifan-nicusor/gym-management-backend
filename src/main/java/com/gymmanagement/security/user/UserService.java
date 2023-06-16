@@ -6,6 +6,7 @@ import com.gymmanagement.security.emailbuilder.EmailBuilderService;
 import com.gymmanagement.security.resettoken.ResetToken;
 import com.gymmanagement.security.resettoken.ResetTokenRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +25,8 @@ public class UserService implements UserDetailsService {
     private final EmailValidator emailValidator;
     private final EmailSender emailSender;
     private final EmailBuilderService emailBuilderService;
+    @Value("${domain}")
+    private String domain;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -53,7 +56,7 @@ public class UserService implements UserDetailsService {
     public void sendPasswordResetEmail(String email) {
         var user = userRepository.findByEmail(email).orElseThrow();
         String token = UUID.randomUUID().toString();
-        String link = "http://localhost:8080/api/v1/auth/reset-password?resetToken=" + token;
+        String link =  domain + "/api/v1/auth/reset-password?resetToken=" + token;
 
         var resetToken = ResetToken.builder()
                 .token(token)

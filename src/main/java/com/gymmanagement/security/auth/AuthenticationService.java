@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.gymmanagement.security.user.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,6 +36,8 @@ public class AuthenticationService {
     private final EmailBuilderService emailBuilderService;
     private final EmailSender emailSender;
     private final UserService userService;
+    @Value("${domain}")
+    private String domain;
 
     public void register(RegisterRequest request) {
         var user = User.builder()
@@ -118,7 +121,7 @@ public class AuthenticationService {
 
     private void sendConfirmationEmail(User user) {
         String email = user.getEmail();
-        String link = "http://localhost:8080/api/v1/auth/confirm-account?email=" + email;
+        String link = domain + "/api/v1/auth/confirm-account?email=" + email;
 
         emailSender.send(email, emailBuilderService.confirmationEmailBuilder(user.getFirstName(), link));
     }

@@ -32,6 +32,9 @@ jwt:
 # email validator properties
 email-regex: "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$"
 
+# domain url
+domain: http://localhost:8080
+
 server:
   error:
     include-message: always
