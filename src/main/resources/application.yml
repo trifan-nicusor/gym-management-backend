@@ -29,7 +29,7 @@ server:
 # jwt properties
 jwt:
   expiration: 86400000 # 1 day
-  refreshExpiration: 604800000 # 7 days
+  refresh-expiration: 604800000 # 7 days
   secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
 
 # email validator properties

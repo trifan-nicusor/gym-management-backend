@@ -19,7 +19,7 @@ public class JwtService {
 
     @Value("${jwt.expiration}")
     private long jwtExpiration;
-    @Value("${jwt.refreshExpiration}")
+    @Value("${jwt.refresh-expiration}")
     private long refreshExpiration;
     @Value("${jwt.secret-key}")
     private String secretKey;
