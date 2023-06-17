@@ -22,6 +22,9 @@ spring:
           connection-timeout: 5000
           timeout: 3000
           write timeout: 5000
+server:
+  error:
+    include-message: always
 
 # jwt properties
 jwt:
@@ -39,7 +42,3 @@ domain: http://localhost:8080
 uuid:
   token:
     expiration: 15 # in minutes
-
-server:
-  error:
-    include-message: always

@@ -107,7 +107,7 @@ public class AuthenticationController {
         return ResponseEntity.badRequest().build();
     }
 
-    @PatchMapping("/forgot-password")
+    @PostMapping("/forgot-password")
     public void forgotPassword(@RequestBody EmailRequest request) {
         userService.sendPasswordResetEmail(request.getEmail());
     }
