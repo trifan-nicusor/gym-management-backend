@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -41,14 +40,12 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
-        boolean isEmailInvalid = userService.userExists(request.getEmail()) || !userService.isEmailValid(request.getEmail());
-
-        if (isEmailInvalid) {
-            return new ResponseEntity<>("Email is already taken or has an invalid format!", HttpStatus.BAD_REQUEST);
+        if(authService.isEmailValid(request.getEmail())){
+            authService.register(request);
+            return ResponseEntity.ok("User successfully registered!");
         }
 
-        authService.register(request);
-        return new ResponseEntity<>("User successfully registered!", HttpStatus.CREATED);
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/confirm-account")

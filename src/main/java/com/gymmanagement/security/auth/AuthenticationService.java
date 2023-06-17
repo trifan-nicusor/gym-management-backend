@@ -23,6 +23,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -164,5 +165,9 @@ public class AuthenticationService {
                 .build();
 
         tokenRepository.save(token);
+    }
+
+    public boolean isEmailValid(String email) {
+        return !userService.userExists(email) && userService.isEmailValid(email);
     }
 }
