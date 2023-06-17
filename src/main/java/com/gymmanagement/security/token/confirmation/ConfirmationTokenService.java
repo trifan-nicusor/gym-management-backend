@@ -13,4 +13,8 @@ public class ConfirmationTokenService {
     public Optional<ConfirmationToken> findByToken(String token) {
         return confirmationTokenRepository.findByToken(token);
     }
+
+    public boolean isTokenPresent(String token) {
+        return findByToken(token).isPresent();
+    }
 }

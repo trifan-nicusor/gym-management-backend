@@ -49,12 +49,17 @@ public class AuthenticationController {
 
     @GetMapping("/confirm-account")
     public ResponseEntity<String> confirmAccount(@RequestParam("confirmationToken") String token) {
-        ConfirmationToken confirmationToken = confirmationTokenService.findByToken(token).orElseThrow();
-        User user = confirmationToken.getUser();
+        ConfirmationToken confirmationToken;
+        User user;
 
-        if (userService.userExists(user.getEmail()) && !confirmationToken.getExpiresAt().isBefore(LocalDateTime.now())) {
-            authService.confirmAccount(user);
-            return new ResponseEntity<>("User successfully confirmed!", HttpStatus.OK);
+        if (confirmationTokenService.isTokenPresent(token)) {
+            confirmationToken = confirmationTokenService.findByToken(token).orElseThrow();
+            user = confirmationToken.getUser();
+
+            if (userService.userExists(user.getEmail()) && !confirmationToken.getExpiresAt().isBefore(LocalDateTime.now())) {
+                authService.confirmAccount(user);
+                return new ResponseEntity<>("User successfully confirmed!", HttpStatus.OK);
+            }
         }
 
         return new ResponseEntity<>("User not found or the token is expired!", HttpStatus.BAD_REQUEST);

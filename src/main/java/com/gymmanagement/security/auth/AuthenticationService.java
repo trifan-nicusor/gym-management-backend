@@ -126,15 +126,17 @@ public class AuthenticationService {
         String token = UUID.randomUUID().toString();
         String link = domain + "/api/v1/auth/confirm-account?confirmationToken=" + token;
 
-        var buildToken = ConfirmationToken.builder()
-                .token(token)
-                .createdAt(LocalDateTime.now())
-                .expiresAt(LocalDateTime.now().plusMinutes(15))
-                .user(user)
-                .build();
+        if (user.getConfirmedAt() == null) {
+            var buildToken = ConfirmationToken.builder()
+                    .token(token)
+                    .createdAt(LocalDateTime.now())
+                    .expiresAt(LocalDateTime.now().plusMinutes(15))
+                    .user(user)
+                    .build();
 
-        confirmationTokenRepository.save(buildToken);
-        emailSender.send(user.getEmail(), emailBuilderService.confirmationEmailBuilder(user.getFirstName(), link));
+            confirmationTokenRepository.save(buildToken);
+            emailSender.send(user.getEmail(), emailBuilderService.confirmationEmailBuilder(user.getFirstName(), link));
+        }
     }
 
     private void revokeAllUserTokens(User user) {
