@@ -40,6 +40,7 @@ public class User implements UserDetails {
     private UserRole role;
     private boolean isLocked;
     private boolean isEnabled;
+    private LocalDateTime updatedAt;
     private LocalDateTime confirmedAt;
     @OneToMany(
             mappedBy = "user",
@@ -61,16 +62,20 @@ public class User implements UserDetails {
                 String password,
                 String firstName,
                 String lastName,
-                UserRole userRole,
+                UserRole role,
                 boolean isLocked,
-                boolean isEnabled) {
+                boolean isEnabled,
+                LocalDateTime updatedAt,
+                LocalDateTime confirmedAt) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = userRole;
+        this.role = role;
         this.isLocked = isLocked;
         this.isEnabled = isEnabled;
+        this.updatedAt = updatedAt;
+        this.confirmedAt = confirmedAt;
     }
 
     @Override

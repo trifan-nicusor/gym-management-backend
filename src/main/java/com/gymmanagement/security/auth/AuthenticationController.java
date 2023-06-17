@@ -4,7 +4,6 @@ import com.gymmanagement.security.request.EmailRequest;
 import com.gymmanagement.security.request.PasswordRequest;
 import com.gymmanagement.security.request.RegisterRequest;
 import com.gymmanagement.security.request.ResetRequest;
-import com.gymmanagement.security.token.confirmation.ConfirmationToken;
 import com.gymmanagement.security.token.confirmation.ConfirmationTokenService;
 import com.gymmanagement.security.token.reset.ResetToken;
 import com.gymmanagement.security.token.reset.ResetTokenService;
@@ -40,7 +39,8 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
-        if(authService.isEmailValid(request.getEmail())){
+
+        if (authService.isEmailValid(request.getEmail())) {
             authService.register(request);
             return ResponseEntity.ok("User successfully registered!");
         }
@@ -49,21 +49,8 @@ public class AuthenticationController {
     }
 
     @GetMapping("/confirm-account")
-    public ResponseEntity<String> confirmAccount(@RequestParam("confirmationToken") String token) {
-        ConfirmationToken confirmationToken;
-        User user;
-
-        if (confirmationTokenService.isTokenPresent(token)) {
-            confirmationToken = confirmationTokenService.findByToken(token).orElseThrow();
-            user = confirmationToken.getUser();
-
-            if (userService.userExists(user.getEmail()) && !confirmationToken.getExpiresAt().isBefore(LocalDateTime.now())) {
-                authService.confirmAccount(user);
-                return new ResponseEntity<>("User successfully confirmed!", HttpStatus.OK);
-            }
-        }
-
-        return new ResponseEntity<>("User not found or the token is expired!", HttpStatus.BAD_REQUEST);
+    public void confirmAccount(@RequestParam("confirmationToken") String token) {
+        authService.confirmAccount(token);
     }
 
     @PostMapping("/resend-confirmation-email")

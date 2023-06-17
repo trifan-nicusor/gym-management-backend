@@ -9,12 +9,12 @@ import com.gymmanagement.security.token.Token;
 import com.gymmanagement.security.token.TokenRepository;
 import com.gymmanagement.security.token.confirmation.ConfirmationToken;
 import com.gymmanagement.security.token.confirmation.ConfirmationTokenRepository;
+import com.gymmanagement.security.token.confirmation.ConfirmationTokenService;
 import com.gymmanagement.security.user.UserRepository;
 import com.gymmanagement.security.user.UserRole;
 import com.gymmanagement.security.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.gymmanagement.security.user.User;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +38,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
     private final ConfirmationTokenRepository confirmationTokenRepository;
+    private final ConfirmationTokenService confirmationTokenService;
     private final EmailBuilderService emailBuilderService;
     private final EmailSender emailSender;
     private final UserService userService;
@@ -53,6 +54,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(UserRole.USER)
+                .updatedAt(LocalDateTime.now())
                 .isEnabled(false)
                 .build();
 
@@ -63,10 +65,15 @@ public class AuthenticationService {
         sendConfirmationEmail(user);
     }
 
-    @Transactional
-    public void confirmAccount(User user) {
-        user.setConfirmedAt(LocalDateTime.now());
-        userService.enableUser(user.getEmail());
+    public void confirmAccount(String token) {
+        if (confirmationTokenService.isTokenPresent(token)) {
+            ConfirmationToken confirmationToken = confirmationTokenService.findByToken(token);
+            User user = confirmationToken.getUser();
+
+            if (user.getConfirmedAt() == null || !confirmationToken.getExpiresAt().isBefore(LocalDateTime.now())) {
+                userService.enableUser(user);
+            }
+        }
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {

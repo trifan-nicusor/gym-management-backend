@@ -5,6 +5,7 @@ import com.gymmanagement.security.email.EmailValidator;
 import com.gymmanagement.security.email.builder.EmailBuilderService;
 import com.gymmanagement.security.token.reset.ResetToken;
 import com.gymmanagement.security.token.reset.ResetTokenRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -56,8 +57,9 @@ public class UserService implements UserDetailsService {
         return emailValidator.test(email);
     }
 
-    public void enableUser(String email) {
-        userRepository.enableUser(email);
+    @Transactional
+    public void enableUser(User user) {
+        userRepository.enableUser(user.getEmail());
     }
 
     public void sendPasswordResetEmail(String email) {
