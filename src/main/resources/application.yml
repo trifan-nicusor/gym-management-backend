@@ -41,4 +41,4 @@ domain: http://localhost:8080
 #UUID token expiration time
 uuid:
   token:
-    expiration: 15 # in minutes
+    expiration: 1 # in minutes

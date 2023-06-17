@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -114,12 +115,16 @@ public class AuthenticationController {
     public ResponseEntity<String> forgotPassword(@RequestBody EmailRequest request) {
         String email = request.getEmail();
 
-        if (!userService.userExists(email)) {
-            return ResponseEntity.badRequest().build();
+        if (userService.userExists(email)) {
+            User user = userService.loadByEmail(email).orElseThrow();
+
+            if (resetTokenService.hasTokenAvailable(user.getId())) {
+                userService.sendPasswordResetEmail(email);
+                return ResponseEntity.ok("Email successfully sent!");
+            }
         }
 
-        userService.sendPasswordResetEmail(email);
-        return ResponseEntity.ok("Email successfully sent!");
+        return ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/reset-password")
