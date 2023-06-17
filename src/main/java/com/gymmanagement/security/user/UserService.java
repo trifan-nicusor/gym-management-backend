@@ -77,9 +77,8 @@ public class UserService implements UserDetailsService {
         emailSender.send(email, emailBuilderService.forgotPasswordEmailBuilder(user.getFirstName(), link));
     }
 
-    public void resetPassword(String token, String password) {
-        ResetToken resetToken = resetTokenRepository.findByToken(token).orElseThrow();
-        UserDetails user = resetToken.getUser();
+    public void resetPassword(ResetToken token, String password) {
+        UserDetails user = token.getUser();
 
         changePassword(user, password);
     }

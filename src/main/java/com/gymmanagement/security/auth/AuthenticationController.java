@@ -6,6 +6,8 @@ import com.gymmanagement.security.request.RegisterRequest;
 import com.gymmanagement.security.request.ResetRequest;
 import com.gymmanagement.security.token.confirmation.ConfirmationToken;
 import com.gymmanagement.security.token.confirmation.ConfirmationTokenService;
+import com.gymmanagement.security.token.reset.ResetToken;
+import com.gymmanagement.security.token.reset.ResetTokenService;
 import com.gymmanagement.security.user.User;
 import com.gymmanagement.security.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,6 +35,7 @@ public class AuthenticationController {
 
     private final AuthenticationService authService;
     private final ConfirmationTokenService confirmationTokenService;
+    private final ResetTokenService resetTokenService;
     private final UserService userService;
 
     @PostMapping("/register")
@@ -108,13 +111,31 @@ public class AuthenticationController {
     }
 
     @PostMapping("/forgot-password")
-    public void forgotPassword(@RequestBody EmailRequest request) {
-        userService.sendPasswordResetEmail(request.getEmail());
+    public ResponseEntity<String> forgotPassword(@RequestBody EmailRequest request) {
+        String email = request.getEmail();
+
+        if (!userService.userExists(email)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        userService.sendPasswordResetEmail(email);
+        return ResponseEntity.ok("Email successfully sent!");
     }
 
     @PatchMapping("/reset-password")
-    public void restPassword(@RequestParam("resetToken") String token,
-                             @RequestBody ResetRequest request) {
-        userService.resetPassword(token, request.getPassword());
+    public ResponseEntity<String> restPassword(@RequestParam("resetToken") String token,
+                                               @RequestBody ResetRequest request) {
+        ResetToken resetToken;
+
+        if (resetTokenService.isTokenPresent(token)) {
+            resetToken = resetTokenService.findByToken(token).orElseThrow();
+
+            if (!resetToken.getExpiresAt().isBefore(LocalDateTime.now())) {
+                userService.resetPassword(resetToken, request.getPassword());
+                return ResponseEntity.ok("Password successfully reset!");
+            }
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 }
