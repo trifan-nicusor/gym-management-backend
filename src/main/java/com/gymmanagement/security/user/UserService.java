@@ -28,6 +28,8 @@ public class UserService implements UserDetailsService {
     private final EmailBuilderService emailBuilderService;
     @Value("${domain}")
     private String domain;
+    @Value("${uuid.token.expiration}")
+    private int expireTime;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -66,7 +68,7 @@ public class UserService implements UserDetailsService {
         var resetToken = ResetToken.builder()
                 .token(token)
                 .createdAt(LocalDateTime.now())
-                .expiresAt(LocalDateTime.now().plusMinutes(15))
+                .expiresAt(LocalDateTime.now().plusMinutes(expireTime))
                 .user(user)
                 .build();
 

@@ -42,6 +42,8 @@ public class AuthenticationService {
     private final UserService userService;
     @Value("${domain}")
     private String domain;
+    @Value("${uuid.token.expiration}")
+    private int expireTime;
 
     public void register(RegisterRequest request) {
         var user = User.builder()
@@ -129,7 +131,7 @@ public class AuthenticationService {
             var buildToken = ConfirmationToken.builder()
                     .token(token)
                     .createdAt(LocalDateTime.now())
-                    .expiresAt(LocalDateTime.now().plusMinutes(15))
+                    .expiresAt(LocalDateTime.now().plusMinutes(expireTime))
                     .user(user)
                     .build();
 
