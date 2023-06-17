@@ -71,6 +71,8 @@ public class AuthenticationController {
 
         if (user.getConfirmedAt() != null) {
             return new ResponseEntity<>("User already confirmed!", HttpStatus.BAD_REQUEST);
+        } else if (!confirmationTokenService.hasTokenAvailable(user.getId())) {
+            return new ResponseEntity<>("User already have an available token!", HttpStatus.BAD_REQUEST);
         }
 
         authService.sendConfirmationEmail(user);

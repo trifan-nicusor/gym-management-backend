@@ -2,6 +2,7 @@ package com.gymmanagement.security.token.confirmation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -16,5 +17,12 @@ public class ConfirmationTokenService {
 
     public boolean isTokenPresent(String token) {
         return findByToken(token).isPresent();
+    }
+
+    public boolean hasTokenAvailable(Long id) {
+        return confirmationTokenRepository
+                .getUserLastToken(id)
+                .getExpiresAt()
+                .isBefore(LocalDateTime.now());
     }
 }
