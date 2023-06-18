@@ -2,6 +2,7 @@ package com.gymmanagement.security.token.confirmation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 
 @Service
@@ -23,5 +24,16 @@ public class ConfirmationTokenService {
                 .getUserLastToken(id)
                 .getExpiresAt()
                 .isBefore(LocalDateTime.now());
+    }
+
+    public boolean isLinkValid(String token) {
+        if (isTokenPresent(token)) {
+            ConfirmationToken confirmationToken = confirmationTokenRepository.loadByToken(token);
+            boolean isUserConfirmed = confirmationToken.getUser().getConfirmedAt() == null;
+
+            return !confirmationToken.getExpiresAt().isBefore(LocalDateTime.now()) && isUserConfirmed;
+        }
+
+        return false;
     }
 }

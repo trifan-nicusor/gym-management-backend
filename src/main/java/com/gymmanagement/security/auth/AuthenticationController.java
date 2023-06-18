@@ -12,6 +12,7 @@ import com.gymmanagement.security.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -49,8 +50,13 @@ public class AuthenticationController {
     }
 
     @GetMapping("/confirm-account")
-    public void confirmAccount(@RequestParam("confirmationToken") String token) {
-        authService.confirmAccount(token);
+    public ResponseEntity<String> confirmAccount(@RequestParam("confirmationToken") String token) {
+        if (confirmationTokenService.isLinkValid(token)) {
+            authService.confirmAccount(token);
+            return ResponseEntity.ok("Account successfully confirmed!");
+        }
+
+        return new ResponseEntity<>("Expired link!", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/resend-confirmation-email")
