@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -36,11 +37,11 @@ public class AuthenticationController {
     private final ResetTokenService resetTokenService;
     private final UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+    @PostMapping("/signup")
+    public ResponseEntity<String> signup(@RequestBody RegisterRequest request) {
 
         if (authService.isEmailValid(request.getEmail())) {
-            authService.register(request);
+            authService.signup(request);
             return ResponseEntity.ok("User successfully registered!");
         }
 
