@@ -37,8 +37,12 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email).orElseThrow();
     }
 
-    public Optional<User> loadByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public User loadByEmail(String email) {
+        return userRepository.loadByEmail(email);
     }
 
     public void changePassword(UserDetails user, String password) {
@@ -50,7 +54,7 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean userExists(String email) {
-        return this.loadByEmail(email).isPresent();
+        return this.findByEmail(email).isPresent();
     }
 
     public boolean isEmailValid(String email) {

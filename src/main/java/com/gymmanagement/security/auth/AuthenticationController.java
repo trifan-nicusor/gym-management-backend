@@ -12,7 +12,6 @@ import com.gymmanagement.security.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -55,16 +54,18 @@ public class AuthenticationController {
 
     @PostMapping("/resend-confirmation-email")
     public ResponseEntity<String> resendConfirmationEmail(@RequestBody EmailRequest request) {
-        User user = userService.loadByEmail(request.getEmail()).orElseThrow();
+        String email = request.getEmail();
 
-        if (user.getConfirmedAt() != null) {
-            return new ResponseEntity<>("User already confirmed!", HttpStatus.BAD_REQUEST);
-        } else if (!confirmationTokenService.hasTokenAvailable(user.getId())) {
-            return new ResponseEntity<>("User already have an available token!", HttpStatus.BAD_REQUEST);
+        if (userService.userExists(email)) {
+            User user = userService.loadByEmail(email);
+
+            if (user.getConfirmedAt() == null && confirmationTokenService.hasTokenAvailable(user.getId())) {
+                authService.sendConfirmationEmail(user);
+                return ResponseEntity.ok().build();
+            }
         }
 
-        authService.sendConfirmationEmail(user);
-        return new ResponseEntity<>("A new confirmation email has been sent!", HttpStatus.OK);
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/authenticate")
@@ -100,7 +101,7 @@ public class AuthenticationController {
         String email = request.getEmail();
 
         if (userService.userExists(email)) {
-            User user = userService.loadByEmail(email).orElseThrow();
+            User user = userService.loadByEmail(email);
 
             if (resetTokenService.hasTokenAvailable(user.getId())) {
                 userService.sendPasswordResetEmail(email);
