@@ -51,6 +51,7 @@ public class AuthenticationController {
 
     @GetMapping("/confirm-account")
     public ResponseEntity<String> confirmAccount(@RequestParam("confirmationToken") String token) {
+
         if (confirmationTokenService.isLinkValid(token)) {
             authService.confirmAccount(token);
             return ResponseEntity.ok("Account successfully confirmed!");
