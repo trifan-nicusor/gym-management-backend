@@ -9,6 +9,7 @@ import com.gymmanagement.security.token.Token;
 import com.gymmanagement.security.token.TokenRepository;
 import com.gymmanagement.security.token.confirmation.ConfirmationToken;
 import com.gymmanagement.security.token.confirmation.ConfirmationTokenRepository;
+import com.gymmanagement.security.token.confirmation.ConfirmationTokenService;
 import com.gymmanagement.security.user.UserRepository;
 import com.gymmanagement.security.user.UserRole;
 import com.gymmanagement.security.user.UserService;
@@ -37,6 +38,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
     private final ConfirmationTokenRepository confirmationTokenRepository;
+    private final ConfirmationTokenService confirmationTokenService;
     private final EmailBuilderService emailBuilderService;
     private final EmailSender emailSender;
     private final UserService userService;
@@ -65,6 +67,7 @@ public class AuthenticationService {
 
     public void confirmAccount(String token) {
         User user = confirmationTokenRepository.loadByToken(token).getUser();
+        confirmationTokenService.getLastUserToken(user.getId()).setExpiresAt(LocalDateTime.now());
 
         userService.enableUser(user);
     }

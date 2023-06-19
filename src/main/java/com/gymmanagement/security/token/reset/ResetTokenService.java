@@ -16,13 +16,16 @@ public class ResetTokenService {
         return resetTokenRepository.findByToken(token);
     }
 
+    public ResetToken getUserLastToken(Long id) {
+        return resetTokenRepository.getUserLastToken(id);
+    }
+
     public boolean hasTokenAvailable(Long id) {
-        if (resetTokenRepository.getUserLastToken(id) == null) {
+        if (getUserLastToken(id) == null) {
             return false;
         }
 
-        return !resetTokenRepository
-                .getUserLastToken(id)
+        return !getUserLastToken(id)
                 .getExpiresAt()
                 .isBefore(LocalDateTime.now());
     }

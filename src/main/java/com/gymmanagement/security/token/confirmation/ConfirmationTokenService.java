@@ -15,13 +15,16 @@ public class ConfirmationTokenService {
         return confirmationTokenRepository.findByToken(token).isPresent();
     }
 
+    public ConfirmationToken getLastUserToken(Long id) {
+        return confirmationTokenRepository.getUserLastToken(id);
+    }
+
     public boolean hasTokenAvailable(Long id) {
-        if (confirmationTokenRepository.getUserLastToken(id) == null) {
+        if (getLastUserToken(id) == null) {
             return false;
         }
 
-        return confirmationTokenRepository
-                .getUserLastToken(id)
+        return getLastUserToken(id)
                 .getExpiresAt()
                 .isBefore(LocalDateTime.now());
     }
