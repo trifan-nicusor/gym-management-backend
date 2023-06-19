@@ -2,6 +2,7 @@ package com.gymmanagement.security.email;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 

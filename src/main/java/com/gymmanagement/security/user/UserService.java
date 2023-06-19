@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -71,7 +72,7 @@ public class UserService implements UserDetailsService {
     public void sendPasswordResetEmail(String email) {
         var user = userRepository.findByEmail(email).orElseThrow();
         String token = UUID.randomUUID().toString();
-        String link =  domain + "/api/v1/auth/reset-password?resetToken=" + token;
+        String link = domain + "/api/v1/auth/reset-password?resetToken=" + token;
 
         var resetToken = ResetToken.builder()
                 .token(token)
