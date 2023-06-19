@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
-    @Query("SELECT u FROM User u where u.email = ?1")
+    @Query("SELECT u FROM User u WHERE u.email = ?1")
     User loadByEmail(String email);
 
     @Query("SELECT u.isEnabled FROM User u WHERE u.email = ?1")
@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE User u SET u.isEnabled = true, u.confirmedAt = CURRENT_TIMESTAMP, u.updatedAt = CURRENT_TIMESTAMP WHERE u.email = ?1")
+    @Query("UPDATE User u SET u.isEnabled = TRUE , u.confirmedAt = CURRENT_TIMESTAMP, u.updatedAt = CURRENT_TIMESTAMP WHERE u.email = ?1")
     void enableUser(String email);
 
     @Transactional
