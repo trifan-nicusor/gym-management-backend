@@ -2,7 +2,7 @@ package com.gymmanagement.security.user;
 
 import com.gymmanagement.security.token.confirmation.ConfirmationToken;
 import com.gymmanagement.security.token.reset.ResetToken;
-import com.gymmanagement.security.token.Token;
+import com.gymmanagement.security.token.jwt.JwtToken;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -47,7 +47,7 @@ public class User implements UserDetails {
             mappedBy = "user",
             cascade = CascadeType.ALL
     )
-    private List<Token> tokenList;
+    private List<JwtToken> jwtTokenList;
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.ALL

@@ -1,4 +1,4 @@
-package com.gymmanagement.security.token;
+package com.gymmanagement.security.token.jwt;
 
 import com.gymmanagement.security.user.User;
 import jakarta.persistence.Column;
@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Token {
+@Entity(name = "jwt_token")
+public class JwtToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

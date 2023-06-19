@@ -5,8 +5,8 @@ import com.gymmanagement.security.config.JwtService;
 import com.gymmanagement.security.email.EmailSender;
 import com.gymmanagement.security.email.builder.EmailBuilderService;
 import com.gymmanagement.security.request.RegisterRequest;
-import com.gymmanagement.security.token.Token;
-import com.gymmanagement.security.token.TokenRepository;
+import com.gymmanagement.security.token.jwt.JwtToken;
+import com.gymmanagement.security.token.jwt.JwtTokenRepository;
 import com.gymmanagement.security.token.confirmation.ConfirmationToken;
 import com.gymmanagement.security.token.confirmation.ConfirmationTokenRepository;
 import com.gymmanagement.security.token.confirmation.ConfirmationTokenService;
@@ -36,7 +36,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final TokenRepository tokenRepository;
+    private final JwtTokenRepository jwtTokenRepository;
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailBuilderService emailBuilderService;
@@ -145,29 +145,29 @@ public class AuthenticationService {
     }
 
     private void revokeAllUserTokens(User user) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+        var validUserTokens = jwtTokenRepository.findAllValidTokenByUser(user.getId());
 
         if (validUserTokens.isEmpty()) {
             return;
         }
 
-        validUserTokens.forEach(token -> {
-            token.setExpired(true);
-            token.setRevoked(true);
+        validUserTokens.forEach(jwtToken -> {
+            jwtToken.setExpired(true);
+            jwtToken.setRevoked(true);
         });
 
-        tokenRepository.saveAll(validUserTokens);
+        jwtTokenRepository.saveAll(validUserTokens);
     }
 
     private void saveUserToken(User user, String jwtToken) {
-        var token = Token.builder()
+        var token = JwtToken.builder()
                 .user(user)
                 .token(jwtToken)
                 .isExpired(false)
                 .isRevoked(false)
                 .build();
 
-        tokenRepository.save(token);
+        jwtTokenRepository.save(token);
     }
 
     public boolean isEmailValid(String email) {
