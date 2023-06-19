@@ -14,6 +14,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u where u.email = ?1")
     User loadByEmail(String email);
 
+    @Query("SELECT u.isEnabled FROM User u WHERE u.email = ?1")
+    boolean isUserEnabled(String email);
+
     @Transactional
     @Modifying
     @Query("UPDATE User u SET u.isEnabled = true, u.confirmedAt = CURRENT_TIMESTAMP, u.updatedAt = CURRENT_TIMESTAMP WHERE u.email = ?1")

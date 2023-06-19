@@ -91,4 +91,8 @@ public class UserService implements UserDetailsService {
 
         changePassword(user, password);
     }
+
+    public boolean isUserEnabled(String email) {
+        return userRepository.isUserEnabled(email);
+    }
 }

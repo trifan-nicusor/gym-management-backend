@@ -78,8 +78,9 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+        String email = request.getEmail();
 
-        if (userService.userExists(request.getEmail())) {
+        if (userService.userExists(email) && userService.isUserEnabled(email)) {
             return ResponseEntity.ok(authService.login(request));
         }
 
@@ -110,7 +111,7 @@ public class AuthenticationController {
     public ResponseEntity<String> forgotPassword(@RequestBody EmailRequest request) {
         String email = request.getEmail();
 
-        if (userService.userExists(email)) {
+        if (userService.userExists(email) && userService.isUserEnabled(email)) {
             User user = userService.loadByEmail(email);
 
             if (!resetTokenService.hasTokenAvailable(user.getId())) {
