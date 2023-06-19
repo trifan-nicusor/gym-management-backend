@@ -11,7 +11,6 @@ public class ConfirmationTokenService {
 
     private final ConfirmationTokenRepository confirmationTokenRepository;
 
-
     public boolean isTokenPresent(String token) {
         return confirmationTokenRepository.findByToken(token).isPresent();
     }
