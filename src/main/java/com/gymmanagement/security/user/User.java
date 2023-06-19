@@ -25,9 +25,9 @@ import java.util.List;
 
 @Data
 @Builder
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class User implements UserDetails {
 
     @Id
