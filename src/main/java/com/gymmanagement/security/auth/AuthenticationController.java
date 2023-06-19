@@ -60,7 +60,7 @@ public class AuthenticationController {
         return new ResponseEntity<>("Expired link!", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/resend-confirmation-email")
+    @PostMapping("/resend-confirm-account")
     public ResponseEntity<String> resendConfirmationEmail(@RequestBody EmailRequest request) {
         String email = request.getEmail();
 
@@ -76,11 +76,11 @@ public class AuthenticationController {
         return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
 
         if (userService.userExists(request.getEmail())) {
-            return ResponseEntity.ok(authService.authenticate(request));
+            return ResponseEntity.ok(authService.login(request));
         }
 
         return ResponseEntity.badRequest().build();
@@ -95,9 +95,11 @@ public class AuthenticationController {
     @PatchMapping("/update-password")
     public ResponseEntity<String> changePassword(@RequestBody PasswordRequest request) {
         UserDetails user = userService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        String currentPassword = request.getCurrentPassword();
+        String newPassword = request.getNewPassword();
 
-        if (userService.checkIfPasswordMatches(user, request.getCurrentPassword()) && !Objects.equals(request.getCurrentPassword(), request.getNewPassword())) {
-            userService.changePassword(user, request.getNewPassword());
+        if (userService.checkIfPasswordMatches(user, currentPassword) && !Objects.equals(currentPassword, newPassword)) {
+            userService.changePassword(user, newPassword);
             return ResponseEntity.ok("Password successfully changed!");
         }
 
@@ -111,7 +113,7 @@ public class AuthenticationController {
         if (userService.userExists(email)) {
             User user = userService.loadByEmail(email);
 
-            if (resetTokenService.hasTokenAvailable(user.getId())) {
+            if (!resetTokenService.hasTokenAvailable(user.getId())) {
                 userService.sendPasswordResetEmail(email);
                 return ResponseEntity.ok("Email successfully sent!");
             }

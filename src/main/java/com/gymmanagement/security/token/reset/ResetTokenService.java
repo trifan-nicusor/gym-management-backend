@@ -17,7 +17,11 @@ public class ResetTokenService {
     }
 
     public boolean hasTokenAvailable(Long id) {
-        return resetTokenRepository
+        if (resetTokenRepository.getUserLastToken(id) == null) {
+            return false;
+        }
+
+        return !resetTokenRepository
                 .getUserLastToken(id)
                 .getExpiresAt()
                 .isBefore(LocalDateTime.now());

@@ -11,15 +11,16 @@ public class ConfirmationTokenService {
 
     private final ConfirmationTokenRepository confirmationTokenRepository;
 
-    public ConfirmationToken findByToken(String token) {
-        return confirmationTokenRepository.loadByToken(token);
-    }
 
     public boolean isTokenPresent(String token) {
         return confirmationTokenRepository.findByToken(token).isPresent();
     }
 
     public boolean hasTokenAvailable(Long id) {
+        if (confirmationTokenRepository.getUserLastToken(id) == null) {
+            return false;
+        }
+
         return confirmationTokenRepository
                 .getUserLastToken(id)
                 .getExpiresAt()
