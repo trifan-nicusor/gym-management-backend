@@ -1,6 +1,7 @@
 package com.gymmanagement.equipment;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,5 +31,10 @@ public class EquipmentController {
     @GetMapping("/{id}")
     public EquipmentDTO getEquipment(@PathVariable Long id) {
         return equipmentService.getEquipment(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteEquipment(@PathVariable Long id) {
+        equipmentService.deleteEquipment(id);
     }
 }

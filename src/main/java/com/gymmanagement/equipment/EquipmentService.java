@@ -45,4 +45,9 @@ public class EquipmentService {
 
         return equipmentMapper.apply(equipment);
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void deleteEquipment(Long id) {
+        equipmentRepository.deleteById(id);
+    }
 }
