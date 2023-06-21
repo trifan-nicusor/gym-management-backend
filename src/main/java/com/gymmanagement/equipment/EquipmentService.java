@@ -23,18 +23,6 @@ public class EquipmentService {
                 .collect(Collectors.toList());
     }
 
-    public EquipmentDTO getEquipment(Long id) {
-        Equipment equipment = equipmentRepository.findById(id).orElseThrow(
-                () -> new UsernameNotFoundException("Equipment not found exception!")
-        );
-
-        if(equipmentRepository.getEquipmentById(id) == null) {
-            return null;
-        }
-
-        return equipmentMapper.apply(equipment);
-    }
-
     @PreAuthorize("hasAuthority('ADMIN')")
     public void addEquipment(EquipmentRequest request) {
         var equipment = Equipment.builder()
@@ -48,5 +36,13 @@ public class EquipmentService {
                 .build();
 
         equipmentRepository.save(equipment);
+    }
+
+    public EquipmentDTO getEquipment(Long id) {
+        Equipment equipment = equipmentRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("Equipment not found exception!")
+        );
+
+        return equipmentMapper.apply(equipment);
     }
 }
