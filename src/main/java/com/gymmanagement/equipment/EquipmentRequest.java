@@ -15,4 +15,5 @@ public class EquipmentRequest {
     private String goals;
     private String positioning;
     private String execution;
+    private Boolean isActive;
 }
