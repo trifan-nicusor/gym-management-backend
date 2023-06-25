@@ -1,6 +1,7 @@
 package com.gymmanagement.equipment;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -30,18 +31,35 @@ public class EquipmentController {
     }
 
     @GetMapping("/{id}")
-    public EquipmentDTO getEquipment(@PathVariable Long id) {
-        return equipmentService.getEquipment(id);
+    public ResponseEntity<String> getEquipment(@PathVariable Long id) {
+
+        if(equipmentService.getEquipment(id) != null) {
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEquipment(@PathVariable Long id) {
-        equipmentService.deleteEquipment(id);
+    public ResponseEntity<String> deleteEquipment(@PathVariable Long id) {
+
+        if(equipmentService.loadEquipmentById(id) != null) {
+            equipmentService.deleteEquipment(id);
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/{id}")
-    public void updateEquipment(@PathVariable Long id,
-                                @RequestBody EquipmentRequest request) {
-        equipmentService.updateEquipment(id, request);
+    public ResponseEntity<String> updateEquipment(@PathVariable Long id,
+                                                  @RequestBody EquipmentRequest request) {
+
+        if(equipmentService.loadEquipmentById(id) != null) {
+            equipmentService.updateEquipment(id, request);
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 }
