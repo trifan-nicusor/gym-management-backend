@@ -54,6 +54,7 @@ public class EquipmentService {
         );
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void updateEquipment(Long id, EquipmentRequest request) {
         Equipment equipment = loadEquipmentById(id);
 

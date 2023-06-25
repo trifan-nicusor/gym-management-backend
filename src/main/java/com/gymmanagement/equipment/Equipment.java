@@ -28,20 +28,4 @@ public class Equipment {
     private String execution;
     private boolean active;
     private LocalDateTime createdAt;
-
-    public Equipment(String name,
-                     String description,
-                     String goals,
-                     String positioning,
-                     String execution,
-                     boolean active,
-                     LocalDateTime createdAt) {
-        this.name = name;
-        this.description = description;
-        this.goals = goals;
-        this.positioning = positioning;
-        this.execution = execution;
-        this.active = active;
-        this.createdAt = createdAt;
-    }
 }
