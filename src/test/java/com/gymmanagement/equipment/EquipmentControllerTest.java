@@ -1,6 +1,8 @@
 package com.gymmanagement.equipment;
 
 import com.gymmanagement.AbstractTest;
+import com.gymmanagement.equipment.request.SaveRequest;
+import com.gymmanagement.equipment.request.UpdateRequest;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

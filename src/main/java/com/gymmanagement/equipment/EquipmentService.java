@@ -1,5 +1,7 @@
 package com.gymmanagement.equipment;
 
+import com.gymmanagement.equipment.request.SaveRequest;
+import com.gymmanagement.equipment.request.UpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;

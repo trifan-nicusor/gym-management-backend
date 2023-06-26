@@ -1,5 +1,7 @@
 package com.gymmanagement.equipment;
 
+import com.gymmanagement.equipment.request.SaveRequest;
+import com.gymmanagement.equipment.request.UpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

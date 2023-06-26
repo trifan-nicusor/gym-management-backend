@@ -1,4 +1,4 @@
-package com.gymmanagement.equipment;
+package com.gymmanagement.equipment.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +11,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateRequest extends SaveRequest{
+public class UpdateRequest extends SaveRequest {
     private Boolean active;
 }

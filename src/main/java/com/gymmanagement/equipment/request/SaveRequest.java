@@ -1,4 +1,4 @@
-package com.gymmanagement.equipment;
+package com.gymmanagement.equipment.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
