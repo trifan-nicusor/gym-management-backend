@@ -1,6 +1,7 @@
 package com.gymmanagement.equipment;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,26 +27,23 @@ public class EquipmentController {
     }
 
     @PostMapping
-    public void addEquipment(@RequestBody EquipmentRequest request) {
+    public ResponseEntity<String> addEquipment(@RequestBody EquipmentRequest request) {
         equipmentService.addEquipment(request);
+
+        return new ResponseEntity<>("Equipment successfully added!", HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getEquipment(@PathVariable Long id) {
-
-        if(equipmentService.getEquipment(id) != null) {
-            return ResponseEntity.ok().build();
-        }
-
-        return ResponseEntity.badRequest().build();
+    public EquipmentDTO getEquipment(@PathVariable Long id) {
+        return equipmentService.getEquipment(id);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEquipment(@PathVariable Long id) {
 
-        if(equipmentService.loadEquipmentById(id) != null) {
+        if (equipmentService.loadEquipmentById(id) != null) {
             equipmentService.deleteEquipment(id);
-            return ResponseEntity.ok().build();
+            return new ResponseEntity<>("Equipment successfully deleted!", HttpStatus.OK);
         }
 
         return ResponseEntity.badRequest().build();
@@ -55,9 +53,9 @@ public class EquipmentController {
     public ResponseEntity<String> updateEquipment(@PathVariable Long id,
                                                   @RequestBody EquipmentRequest request) {
 
-        if(equipmentService.loadEquipmentById(id) != null) {
+        if (equipmentService.loadEquipmentById(id) != null) {
             equipmentService.updateEquipment(id, request);
-            return ResponseEntity.ok().build();
+            return new ResponseEntity<>("Equipment successfully updated!", HttpStatus.OK);
         }
 
         return ResponseEntity.badRequest().build();
