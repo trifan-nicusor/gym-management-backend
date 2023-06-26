@@ -18,8 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Transactional
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
 public class EquipmentControllerTest extends AbstractTest {
 
     private final static String baseUri = "/api/v1/equipment";
