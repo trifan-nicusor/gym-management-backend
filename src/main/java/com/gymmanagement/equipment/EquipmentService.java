@@ -2,7 +2,6 @@ package com.gymmanagement.equipment;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,7 +23,7 @@ public class EquipmentService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void addEquipment(EquipmentRequest request) {
+    public void addEquipment(SaveRequest request) {
         var equipment = Equipment.builder()
                 .name(request.getName())
                 .description(request.getDescription())
@@ -38,9 +37,9 @@ public class EquipmentService {
         equipmentRepository.save(equipment);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public EquipmentDTO getEquipment(Long id) {
-        Equipment equipment = loadEquipmentById(id);
-        return equipmentMapper.apply(equipment);
+        return equipmentMapper.apply(loadEquipmentById(id));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -49,13 +48,11 @@ public class EquipmentService {
     }
 
     public Equipment loadEquipmentById(Long id) {
-        return equipmentRepository.findById(id).orElseThrow(
-                () -> new UsernameNotFoundException("Equipment not found exception!")
-        );
+        return equipmentRepository.findById(id).orElseThrow();
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void updateEquipment(Long id, EquipmentRequest request) {
+    public void updateEquipment(Long id, UpdateRequest request) {
         Equipment equipment = loadEquipmentById(id);
 
         if (request.getName() != null) {
@@ -78,10 +75,18 @@ public class EquipmentService {
             equipment.setExecution(request.getExecution());
         }
 
-        if (request.getIsActive() != null) {
-            equipment.setActive(request.getIsActive());
+        if (request.getActive() != null && request.getActive() != equipment.isActive()) {
+            equipment.setActive(request.getActive());
         }
 
         equipmentRepository.save(equipment);
+    }
+
+    public boolean isEquipmentSaved(String equipmentName) {
+        return equipmentRepository.findByName(equipmentName).isPresent();
+    }
+
+    public boolean equipmentExists(Long id) {
+        return equipmentRepository.findById(id).isPresent();
     }
 }
