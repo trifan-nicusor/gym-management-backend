@@ -22,38 +22,52 @@ public class EquipmentController {
     private final EquipmentService equipmentService;
 
     @GetMapping
-    public List<EquipmentDTO> getAllEquipments() {
-        return equipmentService.getAllEquipments();
+    public ResponseEntity<List<EquipmentDTO>> getAllEquipments() {
+        List<EquipmentDTO> equipments = equipmentService.getAllEquipments();
+
+        if (equipments.size() > 0) {
+            return new ResponseEntity<>(equipments, HttpStatus.OK);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<String> addEquipment(@RequestBody EquipmentRequest request) {
+    public ResponseEntity<String> saveEquipment(@RequestBody SaveRequest request) {
         equipmentService.addEquipment(request);
 
-        return new ResponseEntity<>("Equipment successfully added!", HttpStatus.CREATED);
-    }
-
-    @GetMapping("/{id}")
-    public EquipmentDTO getEquipment(@PathVariable Long id) {
-        return equipmentService.getEquipment(id);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEquipment(@PathVariable Long id) {
-
-        if (equipmentService.loadEquipmentById(id) != null) {
-            equipmentService.deleteEquipment(id);
-            return new ResponseEntity<>("Equipment successfully deleted!", HttpStatus.OK);
+        if(equipmentService.isEquipmentSaved(request.getName())) {
+            return new ResponseEntity<>("Equipment successfully added!", HttpStatus.CREATED);
         }
 
         return ResponseEntity.badRequest().build();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<EquipmentDTO> getEquipment(@PathVariable Long id) {
+
+        if(equipmentService.equipmentExists(id)) {
+            return new ResponseEntity<>(equipmentService.getEquipment(id), HttpStatus.OK);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteEquipment(@PathVariable Long id) {
+
+        if (equipmentService.equipmentExists(id)) {
+            equipmentService.deleteEquipment(id);
+            return new ResponseEntity<>("Equipment successfully deleted!", HttpStatus.OK);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<String> updateEquipment(@PathVariable Long id,
-                                                  @RequestBody EquipmentRequest request) {
-
-        if (equipmentService.loadEquipmentById(id) != null) {
+                                                  @RequestBody UpdateRequest request) {
+        if (equipmentService.equipmentExists(id)) {
             equipmentService.updateEquipment(id, request);
             return new ResponseEntity<>("Equipment successfully updated!", HttpStatus.OK);
         }
