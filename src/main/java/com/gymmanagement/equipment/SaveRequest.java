@@ -1,19 +1,18 @@
 package com.gymmanagement.equipment;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EquipmentRequest {
+public class SaveRequest {
     private String name;
     private String description;
     private String goals;
     private String positioning;
     private String execution;
-    private Boolean isActive;
 }
