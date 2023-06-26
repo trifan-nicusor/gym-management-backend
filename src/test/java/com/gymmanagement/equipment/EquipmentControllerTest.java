@@ -32,7 +32,7 @@ public class EquipmentControllerTest extends AbstractTest {
     }
 
     @Test
-    public void getEquipmentList() throws Exception {
+    void getEquipmentList() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(baseUri)
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
 
@@ -46,7 +46,7 @@ public class EquipmentControllerTest extends AbstractTest {
 
     @WithMockUser(authorities = "ADMIN")
     @Test
-    public void saveEquipment() throws Exception {
+    void saveEquipment() throws Exception {
         var equipment = SaveRequest.builder()
                 .name("name")
                 .description("description")
@@ -70,7 +70,7 @@ public class EquipmentControllerTest extends AbstractTest {
 
     @WithMockUser(authorities = {"ADMIN", "USER"})
     @Test
-    public void getEquipment() throws Exception {
+    void getEquipment() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(baseUri + "/1")
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         int status = mvcResult.getResponse().getStatus();
@@ -85,7 +85,7 @@ public class EquipmentControllerTest extends AbstractTest {
 
     @WithMockUser(authorities = "ADMIN")
     @Test
-    public void deleteProduct() throws Exception {
+    void deleteProduct() throws Exception {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete(baseUri + "/1"))
                 .andReturn();
 
@@ -100,7 +100,7 @@ public class EquipmentControllerTest extends AbstractTest {
 
     @WithMockUser(authorities = "ADMIN")
     @Test
-    public void updateProduct() throws Exception {
+    void updateProduct() throws Exception {
         var equipment = UpdateRequest.builder()
                 .active(false)
                 .build();
