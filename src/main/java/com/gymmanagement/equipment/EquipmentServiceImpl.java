@@ -36,7 +36,6 @@ public class EquipmentServiceImpl implements EquipmentService {
         equipmentRepository.save(equipment);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Override
     public EquipmentDTO getEquipment(Long id) {
         return equipmentMapper.apply(loadEquipmentById(id));

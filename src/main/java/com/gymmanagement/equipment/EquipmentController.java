@@ -36,7 +36,7 @@ public class EquipmentController {
     public ResponseEntity<String> saveEquipment(@RequestBody EquipmentRequest request) {
         equipmentServiceImpl.saveEquipment(request);
 
-        if(equipmentServiceImpl.isEquipmentSaved(request.getName())) {
+        if (equipmentServiceImpl.isEquipmentSaved(request.getName())) {
             return new ResponseEntity<>("Equipment successfully added!", HttpStatus.CREATED);
         }
 
@@ -46,7 +46,7 @@ public class EquipmentController {
     @GetMapping("/{id}")
     public ResponseEntity<EquipmentDTO> getEquipment(@PathVariable Long id) {
 
-        if(equipmentServiceImpl.equipmentExists(id)) {
+        if (equipmentServiceImpl.equipmentExists(id)) {
             return new ResponseEntity<>(equipmentServiceImpl.getEquipment(id), HttpStatus.OK);
         }
 
