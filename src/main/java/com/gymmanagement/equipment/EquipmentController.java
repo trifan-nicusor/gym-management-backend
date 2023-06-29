@@ -19,11 +19,11 @@ import java.util.List;
 @RequestMapping("/api/v1/equipment")
 public class EquipmentController {
 
-    private final EquipmentServiceImpl equipmentServiceImpl;
+    private final EquipmentServiceImpl equipmentService;
 
     @GetMapping
     public ResponseEntity<List<EquipmentDTO>> getAllEquipments() {
-        List<EquipmentDTO> equipments = equipmentServiceImpl.getAllEquipments();
+        List<EquipmentDTO> equipments = equipmentService.getAllEquipments();
 
         if (equipments.size() > 0) {
             return new ResponseEntity<>(equipments, HttpStatus.OK);
@@ -34,9 +34,9 @@ public class EquipmentController {
 
     @PostMapping
     public ResponseEntity<String> saveEquipment(@RequestBody EquipmentRequest request) {
-        equipmentServiceImpl.saveEquipment(request);
+        equipmentService.saveEquipment(request);
 
-        if (equipmentServiceImpl.isEquipmentSaved(request.getName())) {
+        if (equipmentService.isEquipmentSaved(request.getName())) {
             return new ResponseEntity<>("Equipment successfully added!", HttpStatus.CREATED);
         }
 
@@ -46,8 +46,8 @@ public class EquipmentController {
     @GetMapping("/{id}")
     public ResponseEntity<EquipmentDTO> getEquipment(@PathVariable Long id) {
 
-        if (equipmentServiceImpl.equipmentExists(id)) {
-            return new ResponseEntity<>(equipmentServiceImpl.getEquipment(id), HttpStatus.OK);
+        if (equipmentService.equipmentExists(id)) {
+            return new ResponseEntity<>(equipmentService.getEquipment(id), HttpStatus.OK);
         }
 
         return ResponseEntity.notFound().build();
@@ -56,8 +56,8 @@ public class EquipmentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEquipment(@PathVariable Long id) {
 
-        if (equipmentServiceImpl.equipmentExists(id)) {
-            equipmentServiceImpl.deleteEquipment(id);
+        if (equipmentService.equipmentExists(id)) {
+            equipmentService.deleteEquipment(id);
             return new ResponseEntity<>("Equipment successfully deleted!", HttpStatus.OK);
         }
 
@@ -67,8 +67,8 @@ public class EquipmentController {
     @PatchMapping("/{id}")
     public ResponseEntity<String> updateEquipment(@PathVariable Long id,
                                                   @RequestBody EquipmentRequest request) {
-        if (equipmentServiceImpl.equipmentExists(id)) {
-            equipmentServiceImpl.updateEquipment(id, request);
+        if (equipmentService.equipmentExists(id)) {
+            equipmentService.updateEquipment(id, request);
             return new ResponseEntity<>("Equipment successfully updated!", HttpStatus.OK);
         }
 
