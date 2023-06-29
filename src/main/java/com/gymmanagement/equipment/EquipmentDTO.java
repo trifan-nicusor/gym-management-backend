@@ -15,4 +15,5 @@ public class EquipmentDTO{
     private String goals;
     private String positioning;
     private String execution;
+    private Boolean active;
 }

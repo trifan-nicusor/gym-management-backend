@@ -1,16 +1,19 @@
-package com.gymmanagement.equipment.request;
+package com.gymmanagement.equipment;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateRequest extends SaveRequest {
+public class EquipmentRequest {
+    private String name;
+    private String description;
+    private String goals;
+    private String positioning;
+    private String execution;
     private Boolean active;
 }

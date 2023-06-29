@@ -1,8 +1,6 @@
 package com.gymmanagement.equipment;
 
 import com.gymmanagement.AbstractTest;
-import com.gymmanagement.equipment.request.SaveRequest;
-import com.gymmanagement.equipment.request.UpdateRequest;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -20,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-
 public class EquipmentControllerTest extends AbstractTest {
 
     private final static String baseUri = "/api/v1/equipment";
@@ -47,7 +44,7 @@ public class EquipmentControllerTest extends AbstractTest {
     @WithMockUser(authorities = "ADMIN")
     @Test
     void saveEquipment() throws Exception {
-        var equipment = SaveRequest.builder()
+        var equipment = EquipmentRequest.builder()
                 .name("name")
                 .description("description")
                 .goals("goals")
@@ -101,7 +98,7 @@ public class EquipmentControllerTest extends AbstractTest {
     @WithMockUser(authorities = "ADMIN")
     @Test
     void updateProduct() throws Exception {
-        var equipment = UpdateRequest.builder()
+        var equipment = EquipmentRequest.builder()
                 .active(false)
                 .build();
 
