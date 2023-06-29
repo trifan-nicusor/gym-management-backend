@@ -14,8 +14,7 @@ public class EquipmentDTOMapper implements Function<Equipment, EquipmentDTO> {
                 equipment.getDescription(),
                 equipment.getGoals(),
                 equipment.getPositioning(),
-                equipment.getExecution(),
-                equipment.isActive()
+                equipment.getExecution()
         );
     }
 }
