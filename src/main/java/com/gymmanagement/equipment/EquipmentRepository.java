@@ -14,5 +14,5 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
     List<Equipment> findAllEquipments();
 
     @Query("SELECT e FROM Equipment e WHERE e.name = ?1")
-    Optional<Equipment> findByName(String equipmentName);
+    Optional<Equipment> findByName(String name);
 }

@@ -15,7 +15,7 @@ public interface EquipmentService {
 
     void updateEquipment(Long id, EquipmentRequest request);
 
-    boolean isEquipmentSaved(String equipmentName);
+    boolean isEquipmentSaved(String name);
 
     boolean equipmentExists(Long id);
 }

@@ -85,8 +85,8 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
-    public boolean isEquipmentSaved(String equipmentName) {
-        return equipmentRepository.findByName(equipmentName).isPresent();
+    public boolean isEquipmentSaved(String name) {
+        return equipmentRepository.findByName(name).isPresent();
     }
 
     @Override
