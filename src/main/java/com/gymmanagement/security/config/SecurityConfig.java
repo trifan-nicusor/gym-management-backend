@@ -30,6 +30,8 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/api/v1/equipment/**")
                         .permitAll()
+                        .requestMatchers("/api/v1/discipline/**")
+                        .permitAll()
                         .anyRequest()
                         .authenticated())
                 .sessionManagement((session) -> session
