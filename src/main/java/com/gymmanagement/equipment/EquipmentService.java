@@ -11,9 +11,9 @@ public interface EquipmentService {
 
     void deleteEquipment(Long id);
 
-    Equipment loadEquipmentById(Long id);
-
     void updateEquipment(Long id, EquipmentRequest request);
+
+    Equipment loadEquipmentById(Long id);
 
     boolean isEquipmentSaved(String name);
 

@@ -17,7 +17,10 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public List<EquipmentDTO> getAllEquipments() {
-        return equipmentRepository.findAllEquipments().stream().map(equipmentMapper).collect(Collectors.toList());
+        return equipmentRepository.findAllEquipments()
+                .stream()
+                .map(equipmentMapper)
+                .collect(Collectors.toList());
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -45,11 +48,6 @@ public class EquipmentServiceImpl implements EquipmentService {
     @Override
     public void deleteEquipment(Long id) {
         equipmentRepository.deleteById(id);
-    }
-
-    @Override
-    public Equipment loadEquipmentById(Long id) {
-        return equipmentRepository.findById(id).orElseThrow();
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -82,6 +80,11 @@ public class EquipmentServiceImpl implements EquipmentService {
         }
 
         equipmentRepository.save(equipment);
+    }
+
+    @Override
+    public Equipment loadEquipmentById(Long id) {
+        return equipmentRepository.findById(id).orElseThrow();
     }
 
     @Override
