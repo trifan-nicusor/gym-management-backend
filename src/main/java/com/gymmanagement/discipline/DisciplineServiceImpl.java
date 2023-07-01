@@ -1,6 +1,5 @@
 package com.gymmanagement.discipline;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     private final DisciplineRepository disciplineRepository;
     private final DisciplineDTOMapper disciplineMapper;
-
 
     @Override
     public List<DisciplineDTO> getAllDisciplines() {
