@@ -7,17 +7,17 @@ public interface SubscriptionService {
 
     void saveSubscription(SubscriptionRequest request);
 
-    SubscriptionDTO getSubscription(Long id);
+    SubscriptionDTO getSubscription(int id);
 
-    void deleteSubscription(Long id);
+    void deleteSubscription(int id);
 
-    void updateSubscription(Long id, SubscriptionRequest request);
+    void updateSubscription(int id, SubscriptionRequest request);
 
     List<SubscriptionDTO> getMySubscriptions();
 
-    Subscription loadSubscriptionById(Long id);
+    Subscription loadSubscriptionById(int id);
 
     boolean isSubscriptionSaved(String name);
 
-    boolean subscriptionExists(Long id);
+    boolean subscriptionExists(int id);
 }

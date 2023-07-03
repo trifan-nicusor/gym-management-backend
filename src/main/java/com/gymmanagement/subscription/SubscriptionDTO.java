@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class SubscriptionDTO {
 
-    private Long id;
+    private int id;
     private String name;
     private boolean active;
     private int duration;

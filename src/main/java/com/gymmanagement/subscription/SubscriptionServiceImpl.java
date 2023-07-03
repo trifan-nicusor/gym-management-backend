@@ -32,7 +32,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         List<Long> activeSubs = userSubscriptionRepository.getAllCurrentSubscriptions(user.getId());
 
         activeSubs.forEach(id -> {
-            Subscription subscription = loadSubscriptionById(id);
+            Subscription subscription = loadSubscriptionById(id.intValue());
 
             subscription.setAvailable(Boolean.FALSE);
         });
@@ -57,7 +57,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         List<Discipline> disciplineList = new ArrayList<>();
 
         request.getDisciplineList().forEach(id -> {
-            Discipline discipline = disciplineService.loadDisciplineById(id.intValue());
+            Discipline discipline = disciplineService.loadDisciplineById(id);
             disciplineList.add(discipline);
         });
 
@@ -67,19 +67,19 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public SubscriptionDTO getSubscription(Long id) {
+    public SubscriptionDTO getSubscription(int id) {
         return subscriptionMapper.apply(loadSubscriptionById(id));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
-    public void deleteSubscription(Long id) {
-        subscriptionRepository.deleteById(id);
+    public void deleteSubscription(int id) {
+        subscriptionRepository.deleteById((long) id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
-    public void updateSubscription(Long subId, SubscriptionRequest request) {
+    public void updateSubscription(int subId, SubscriptionRequest request) {
         Subscription subscription = loadSubscriptionById(subId);
 
         if (request.getName() != null) {
@@ -106,7 +106,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             List<Discipline> disciplineList = new ArrayList<>();
 
             request.getDisciplineList().forEach(id -> {
-                Discipline discipline = disciplineService.loadDisciplineById(id.intValue());
+                Discipline discipline = disciplineService.loadDisciplineById(id);
                 disciplineList.add(discipline);
             });
 
@@ -128,8 +128,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public Subscription loadSubscriptionById(Long id) {
-        return subscriptionRepository.findById(id).orElseThrow();
+    public Subscription loadSubscriptionById(int id) {
+        return subscriptionRepository.findById((long) id).orElseThrow();
     }
 
     @Override
@@ -138,7 +138,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public boolean subscriptionExists(Long id) {
-        return subscriptionRepository.findById(id).isPresent();
+    public boolean subscriptionExists(int id) {
+        return subscriptionRepository.findById((long) id).isPresent();
     }
 }

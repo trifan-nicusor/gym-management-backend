@@ -16,5 +16,5 @@ public class SubscriptionRequest {
     private Integer duration;
     private String description;
     private Integer price;
-    List<Long> disciplineList;
+    List<Integer> disciplineList;
 }

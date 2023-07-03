@@ -43,7 +43,7 @@ public class SubscriptionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubscriptionDTO> getSubscription(@PathVariable Long id) {
+    public ResponseEntity<SubscriptionDTO> getSubscription(@PathVariable int id) {
 
         if (subscriptionService.subscriptionExists(id)) {
             return new ResponseEntity<>(subscriptionService.getSubscription(id), HttpStatus.OK);
@@ -53,7 +53,7 @@ public class SubscriptionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteSubscription(@PathVariable Long id) {
+    public ResponseEntity<String> deleteSubscription(@PathVariable int id) {
 
         if (subscriptionService.subscriptionExists(id)) {
             subscriptionService.deleteSubscription(id);
@@ -64,7 +64,7 @@ public class SubscriptionController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<String> updateSubscription(@PathVariable Long id,
+    public ResponseEntity<String> updateSubscription(@PathVariable int id,
                                                      @RequestBody SubscriptionRequest request) {
         if (subscriptionService.subscriptionExists(id)) {
             subscriptionService.updateSubscription(id, request);
