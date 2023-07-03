@@ -4,7 +4,7 @@ import com.gymmanagement.security.request.EmailRequest;
 import com.gymmanagement.security.request.PasswordRequest;
 import com.gymmanagement.security.request.RegisterRequest;
 import com.gymmanagement.security.request.ResetRequest;
-import com.gymmanagement.security.token.confirmation.ConfirmationTokenService;
+import com.gymmanagement.security.token.confirmation.ConfirmationTokenServiceImpl;
 import com.gymmanagement.security.token.reset.ResetToken;
 import com.gymmanagement.security.token.reset.ResetTokenService;
 import com.gymmanagement.security.user.User;
@@ -33,7 +33,7 @@ import java.util.Objects;
 public class AuthenticationController {
 
     private final AuthenticationService authService;
-    private final ConfirmationTokenService confirmationTokenService;
+    private final ConfirmationTokenServiceImpl confirmationTokenService;
     private final ResetTokenService resetTokenService;
     private final UserService userService;
 

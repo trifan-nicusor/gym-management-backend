@@ -7,7 +7,7 @@ import com.gymmanagement.security.email.builder.EmailBuilderService;
 import com.gymmanagement.security.request.RegisterRequest;
 import com.gymmanagement.security.token.confirmation.ConfirmationToken;
 import com.gymmanagement.security.token.confirmation.ConfirmationTokenRepository;
-import com.gymmanagement.security.token.confirmation.ConfirmationTokenService;
+import com.gymmanagement.security.token.confirmation.ConfirmationTokenServiceImpl;
 import com.gymmanagement.security.token.jwt.JwtToken;
 import com.gymmanagement.security.token.jwt.JwtTokenRepository;
 import com.gymmanagement.security.user.User;
@@ -37,7 +37,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenRepository jwtTokenRepository;
     private final ConfirmationTokenRepository confirmationTokenRepository;
-    private final ConfirmationTokenService confirmationTokenService;
+    private final ConfirmationTokenServiceImpl confirmationTokenService;
     private final EmailBuilderService emailBuilderService;
     private final EmailSender emailSender;
     private final UserService userService;
