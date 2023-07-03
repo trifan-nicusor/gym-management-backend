@@ -1,10 +1,8 @@
 package com.gymmanagement.subscription;
 
-import com.gymmanagement.security.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,7 +19,6 @@ import java.util.List;
 public class SubscriptionController {
 
     private final SubscriptionServiceImpl subscriptionService;
-    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<List<SubscriptionDTO>> getAllSubscriptions() {
@@ -79,8 +76,12 @@ public class SubscriptionController {
 
     @GetMapping("/me/info")
     public ResponseEntity<List<SubscriptionDTO>> getMySubscriptions() {
-        String email = userService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getUsername();
+        List<SubscriptionDTO> subscriptions = subscriptionService.getMySubscriptions();
 
-        return new ResponseEntity<>(userService.getMySubscriptions(email), HttpStatus.OK);
+        if( subscriptions.size() > 0) {
+            return new ResponseEntity<>(subscriptionService.getMySubscriptions(), HttpStatus.OK);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 }

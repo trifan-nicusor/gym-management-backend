@@ -7,9 +7,6 @@ import com.gymmanagement.security.token.reset.ResetToken;
 import com.gymmanagement.security.token.reset.ResetTokenRepository;
 import com.gymmanagement.security.token.reset.ResetTokenServiceImpl;
 import com.gymmanagement.subscription.Subscription;
-import com.gymmanagement.subscription.SubscriptionDTO;
-import com.gymmanagement.subscription.SubscriptionDTOMapper;
-import com.gymmanagement.subscription.SubscriptionRepository;
 import com.gymmanagement.subscription.SubscriptionServiceImpl;
 import com.gymmanagement.subscription.joinentity.UserSubscription;
 import com.gymmanagement.subscription.joinentity.UserSubscriptionRepository;
@@ -26,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,14 +31,12 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserSubscriptionRepository userSubscriptionRepository;
     private final ResetTokenRepository resetTokenRepository;
-    private final SubscriptionRepository subscriptionRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailValidator emailValidator;
     private final EmailSender emailSender;
     private final EmailBuilderService emailBuilderService;
     private final ResetTokenServiceImpl resetTokenService;
     private final SubscriptionServiceImpl subscriptionService;
-    private final SubscriptionDTOMapper subscriptionMapper;
     @Value("${domain}")
     private String domain;
     @Value("${uuid.token.expiration}")
@@ -140,16 +134,5 @@ public class UserService implements UserDetailsService {
 
             userSubscriptionRepository.save(userSubscription);
         }
-    }
-
-    public List<SubscriptionDTO> getMySubscriptions(String email) {
-        List<Long> subscriptionIds = userSubscriptionRepository.getAllCurrentSubscriptions(userRepository.loadByEmail(email).getId());
-        List<Subscription> mySubscriptions = new ArrayList<>();
-
-        subscriptionIds.forEach(id -> mySubscriptions.add(subscriptionRepository.findById(id).orElseThrow()));
-
-        return mySubscriptions.stream()
-                .map(subscriptionMapper)
-                .collect(Collectors.toList());
     }
 }

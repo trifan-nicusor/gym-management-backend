@@ -4,6 +4,7 @@ import com.gymmanagement.discipline.Discipline;
 import com.gymmanagement.discipline.DisciplineService;
 import com.gymmanagement.security.user.User;
 import com.gymmanagement.security.user.UserRepository;
+import com.gymmanagement.security.user.UserService;
 import com.gymmanagement.subscription.joinentity.UserSubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +24,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     private final DisciplineService disciplineService;
     private final UserRepository userRepository;
     private final SubscriptionDTOMapper subscriptionMapper;
+    private final UserService userService;
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Override
@@ -113,6 +115,18 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             subscription.setDisciplineList(disciplineList);
             subscriptionRepository.save(subscription);
         }
+    }
+
+    public List<SubscriptionDTO> getMySubscriptions() {
+        String email = userService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getUsername();
+        List<Long> subscriptionIds = userSubscriptionRepository.getAllCurrentSubscriptions(userRepository.loadByEmail(email).getId());
+        List<Subscription> mySubscriptions = new ArrayList<>();
+
+        subscriptionIds.forEach(id -> mySubscriptions.add(subscriptionRepository.findById(id).orElseThrow()));
+
+        return mySubscriptions.stream()
+                .map(subscriptionMapper)
+                .collect(Collectors.toList());
     }
 
     @Override
