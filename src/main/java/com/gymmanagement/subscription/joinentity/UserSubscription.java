@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @Data
@@ -18,6 +17,7 @@ import java.time.LocalDateTime;
 @Entity(name = "user_subscription")
 @IdClass(UserSubscriptionId.class)
 public class UserSubscription {
+
     @Id
     @Column(name = "user_id")
     private Long userId;
