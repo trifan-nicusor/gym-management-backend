@@ -1,5 +1,11 @@
 package com.gymmanagement.security.user;
 
+import com.gymmanagement.security.email.EmailSender;
+import com.gymmanagement.security.email.EmailValidator;
+import com.gymmanagement.security.email.builder.EmailBuilderService;
+import com.gymmanagement.security.token.reset.ResetToken;
+import com.gymmanagement.security.token.reset.ResetTokenRepository;
+import com.gymmanagement.security.token.reset.ResetTokenServiceImpl;
 import com.gymmanagement.subscription.Subscription;
 import com.gymmanagement.subscription.SubscriptionDTO;
 import com.gymmanagement.subscription.SubscriptionDTOMapper;
@@ -7,12 +13,6 @@ import com.gymmanagement.subscription.SubscriptionRepository;
 import com.gymmanagement.subscription.SubscriptionServiceImpl;
 import com.gymmanagement.subscription.joinentity.UserSubscription;
 import com.gymmanagement.subscription.joinentity.UserSubscriptionRepository;
-import com.gymmanagement.security.email.EmailSender;
-import com.gymmanagement.security.email.EmailValidator;
-import com.gymmanagement.security.email.builder.EmailBuilderService;
-import com.gymmanagement.security.token.reset.ResetToken;
-import com.gymmanagement.security.token.reset.ResetTokenRepository;
-import com.gymmanagement.security.token.reset.ResetTokenServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +21,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -136,7 +135,7 @@ public class UserService implements UserDetailsService {
     private void setSubscriptionExpire(Long userId, Long subscriptionId, int duration) {
         UserSubscription userSubscription = userSubscriptionRepository.findById(userId, subscriptionId);
 
-        if(userSubscription.getExpiresAt() == null) {
+        if (userSubscription.getExpiresAt() == null) {
             userSubscription.setExpiresAt(LocalDateTime.now().plusDays(duration));
 
             userSubscriptionRepository.save(userSubscription);
