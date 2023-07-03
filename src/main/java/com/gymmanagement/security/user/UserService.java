@@ -112,7 +112,7 @@ public class UserService implements UserDetailsService {
         currentSubscription.forEach(id -> request.getSubscriptionList().add(id));
 
         request.getSubscriptionList().forEach(id -> {
-            Subscription subscription = subscriptionService.loadSubscriptionById(id);
+            Subscription subscription = subscriptionService.loadSubscriptionById(id.intValue());
             subscriptionList.add(subscription);
         });
 
@@ -121,7 +121,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
 
         request.getSubscriptionList().forEach(id -> {
-            Subscription subscription = subscriptionService.loadSubscriptionById(id);
+            Subscription subscription = subscriptionService.loadSubscriptionById(id.intValue());
             setSubscriptionExpire(user.getId(), id, subscription.getDuration());
         });
     }
