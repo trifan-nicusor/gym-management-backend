@@ -1,5 +1,12 @@
 package com.gymmanagement.security.user;
 
+import com.gymmanagement.subscription.Subscription;
+import com.gymmanagement.subscription.SubscriptionDTO;
+import com.gymmanagement.subscription.SubscriptionDTOMapper;
+import com.gymmanagement.subscription.SubscriptionRepository;
+import com.gymmanagement.subscription.SubscriptionServiceImpl;
+import com.gymmanagement.subscription.joinentity.UserSubscription;
+import com.gymmanagement.subscription.joinentity.UserSubscriptionRepository;
 import com.gymmanagement.security.email.EmailSender;
 import com.gymmanagement.security.email.EmailValidator;
 import com.gymmanagement.security.email.builder.EmailBuilderService;
@@ -16,20 +23,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final UserSubscriptionRepository userSubscriptionRepository;
     private final ResetTokenRepository resetTokenRepository;
+    private final SubscriptionRepository subscriptionRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailValidator emailValidator;
     private final EmailSender emailSender;
     private final EmailBuilderService emailBuilderService;
     private final ResetTokenService resetTokenService;
+    private final SubscriptionServiceImpl subscriptionService;
+    private final SubscriptionDTOMapper subscriptionMapper;
     @Value("${domain}")
     private String domain;
     @Value("${uuid.token.expiration}")
@@ -95,5 +109,48 @@ public class UserService implements UserDetailsService {
 
     public boolean isUserEnabled(String email) {
         return userRepository.isUserEnabled(email);
+    }
+
+    public void addUserSubscription(String email, SubscriptionRequest request) {
+        User user = loadByEmail(email);
+        List<Subscription> subscriptionList = new ArrayList<>();
+        List<Long> currentSubscription = userSubscriptionRepository.getAllCurrentSubscriptions(user.getId());
+
+        currentSubscription.forEach(id -> request.getSubscriptionList().add(id));
+
+        request.getSubscriptionList().forEach(id -> {
+            Subscription subscription = subscriptionService.loadSubscriptionById(id);
+            subscriptionList.add(subscription);
+        });
+
+        user.setSubscriptionList(subscriptionList);
+
+        userRepository.save(user);
+
+        request.getSubscriptionList().forEach(id -> {
+            Subscription subscription = subscriptionService.loadSubscriptionById(id);
+            setSubscriptionExpire(user.getId(), id, subscription.getDuration());
+        });
+    }
+
+    private void setSubscriptionExpire(Long userId, Long subscriptionId, int duration) {
+        UserSubscription userSubscription = userSubscriptionRepository.findById(userId, subscriptionId);
+
+        if(userSubscription.getExpiresAt() == null) {
+            userSubscription.setExpiresAt(LocalDateTime.now().plusDays(duration));
+
+            userSubscriptionRepository.save(userSubscription);
+        }
+    }
+
+    public List<SubscriptionDTO> getMySubscriptions(String email) {
+        List<Long> subscriptionIds = userSubscriptionRepository.getAllCurrentSubscriptions(userRepository.loadByEmail(email).getId());
+        List<Subscription> mySubscriptions = new ArrayList<>();
+
+        subscriptionIds.forEach(id -> mySubscriptions.add(subscriptionRepository.findById(id).orElseThrow()));
+
+        return mySubscriptions.stream()
+                .map(subscriptionMapper)
+                .collect(Collectors.toList());
     }
 }

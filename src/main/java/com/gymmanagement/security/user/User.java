@@ -1,15 +1,20 @@
 package com.gymmanagement.security.user;
 
 import com.gymmanagement.security.token.confirmation.ConfirmationToken;
-import com.gymmanagement.security.token.reset.ResetToken;
 import com.gymmanagement.security.token.jwt.JwtToken;
+import com.gymmanagement.security.token.reset.ResetToken;
+import com.gymmanagement.subscription.Subscription;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -58,6 +63,25 @@ public class User implements UserDetails {
             cascade = CascadeType.ALL
     )
     private List<ConfirmationToken> confirmationTokenList;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade =
+                    {
+                            CascadeType.DETACH,
+                            CascadeType.MERGE,
+                            CascadeType.REFRESH,
+                            CascadeType.PERSIST
+                    },
+            targetEntity = Subscription.class)
+    @JoinTable(
+            name = "user_subscription",
+            inverseJoinColumns = @JoinColumn(name = "subscription_id",
+                    nullable = false,
+                    updatable = false),
+            joinColumns = @JoinColumn(name = "user_id",
+                    nullable = false,
+                    updatable = false)
+    )
+    private List<Subscription> subscriptionList;
 
     public User(String email,
                 String password,
