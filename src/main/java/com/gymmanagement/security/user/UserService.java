@@ -13,6 +13,7 @@ import com.gymmanagement.subscription.joinentity.UserSubscriptionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -93,6 +94,7 @@ public class UserService implements UserDetailsService {
         emailSender.send(email, emailBuilderService.forgotPasswordEmailBuilder(user.getFirstName(), link));
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public void resetPassword(ResetToken token, String password) {
         User user = token.getUser();
         resetTokenService.getUserLastToken(user.getId()).setExpiresAt(LocalDateTime.now());
@@ -104,6 +106,7 @@ public class UserService implements UserDetailsService {
         return userRepository.isUserEnabled(email);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void addUserSubscription(String email, SubscriptionRequest request) {
         User user = loadByEmail(email);
         List<Subscription> subscriptionList = new ArrayList<>();
