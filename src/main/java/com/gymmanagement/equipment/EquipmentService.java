@@ -7,15 +7,15 @@ public interface EquipmentService {
 
     void saveEquipment(EquipmentRequest request);
 
-    EquipmentDTO getEquipment(Long id);
+    EquipmentDTO getEquipment(int id);
 
-    void deleteEquipment(Long id);
+    void deleteEquipment(int id);
 
-    void updateEquipment(Long id, EquipmentRequest request);
+    void updateEquipment(int id, EquipmentRequest request);
 
-    Equipment loadEquipmentById(Long id);
+    Equipment loadEquipmentById(int id);
 
     boolean isEquipmentSaved(String name);
 
-    boolean equipmentExists(Long id);
+    boolean equipmentExists(int id);
 }

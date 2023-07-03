@@ -43,7 +43,7 @@ public class EquipmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EquipmentDTO> getEquipment(@PathVariable Long id) {
+    public ResponseEntity<EquipmentDTO> getEquipment(@PathVariable int id) {
 
         if (equipmentService.equipmentExists(id)) {
             return new ResponseEntity<>(equipmentService.getEquipment(id), HttpStatus.OK);
@@ -53,7 +53,7 @@ public class EquipmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEquipment(@PathVariable Long id) {
+    public ResponseEntity<String> deleteEquipment(@PathVariable int id) {
 
         if (equipmentService.equipmentExists(id)) {
             equipmentService.deleteEquipment(id);
@@ -64,7 +64,7 @@ public class EquipmentController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<String> updateEquipment(@PathVariable Long id,
+    public ResponseEntity<String> updateEquipment(@PathVariable int id,
                                                   @RequestBody EquipmentRequest request) {
         if (equipmentService.equipmentExists(id)) {
             equipmentService.updateEquipment(id, request);

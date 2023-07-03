@@ -39,19 +39,19 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
-    public EquipmentDTO getEquipment(Long id) {
+    public EquipmentDTO getEquipment(int id) {
         return equipmentMapper.apply(loadEquipmentById(id));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
-    public void deleteEquipment(Long id) {
-        equipmentRepository.deleteById(id);
+    public void deleteEquipment(int id) {
+        equipmentRepository.deleteById((long) id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
-    public void updateEquipment(Long id, EquipmentRequest request) {
+    public void updateEquipment(int id, EquipmentRequest request) {
         Equipment equipment = loadEquipmentById(id);
 
         if (request.getName() != null) {
@@ -82,8 +82,8 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
-    public Equipment loadEquipmentById(Long id) {
-        return equipmentRepository.findById(id).orElseThrow();
+    public Equipment loadEquipmentById(int id) {
+        return equipmentRepository.findById((long) id).orElseThrow();
     }
 
     @Override
@@ -92,7 +92,7 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
-    public boolean equipmentExists(Long id) {
-        return equipmentRepository.findById(id).isPresent();
+    public boolean equipmentExists(int id) {
+        return equipmentRepository.findById((long) id).isPresent();
     }
 }
