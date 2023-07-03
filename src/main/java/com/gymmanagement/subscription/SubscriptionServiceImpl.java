@@ -115,6 +115,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public List<SubscriptionDTO> getMySubscriptions() {
         String email = userRepository.loadByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).getUsername();
         List<Long> subscriptionIds = userSubscriptionRepository.getAllCurrentSubscriptions(userRepository.loadByEmail(email).getId());

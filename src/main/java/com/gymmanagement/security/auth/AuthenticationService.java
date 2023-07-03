@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -92,6 +93,7 @@ public class AuthenticationService {
                 .build();
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
