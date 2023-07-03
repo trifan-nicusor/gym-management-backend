@@ -6,7 +6,7 @@ import com.gymmanagement.security.request.RegisterRequest;
 import com.gymmanagement.security.request.ResetRequest;
 import com.gymmanagement.security.token.confirmation.ConfirmationTokenServiceImpl;
 import com.gymmanagement.security.token.reset.ResetToken;
-import com.gymmanagement.security.token.reset.ResetTokenService;
+import com.gymmanagement.security.token.reset.ResetTokenServiceImpl;
 import com.gymmanagement.security.user.User;
 import com.gymmanagement.security.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,7 +34,7 @@ public class AuthenticationController {
 
     private final AuthenticationService authService;
     private final ConfirmationTokenServiceImpl confirmationTokenService;
-    private final ResetTokenService resetTokenService;
+    private final ResetTokenServiceImpl resetTokenService;
     private final UserService userService;
 
     @PostMapping("/signup")

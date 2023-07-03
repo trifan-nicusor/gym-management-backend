@@ -12,7 +12,7 @@ import com.gymmanagement.security.email.EmailValidator;
 import com.gymmanagement.security.email.builder.EmailBuilderService;
 import com.gymmanagement.security.token.reset.ResetToken;
 import com.gymmanagement.security.token.reset.ResetTokenRepository;
-import com.gymmanagement.security.token.reset.ResetTokenService;
+import com.gymmanagement.security.token.reset.ResetTokenServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
     private final EmailValidator emailValidator;
     private final EmailSender emailSender;
     private final EmailBuilderService emailBuilderService;
-    private final ResetTokenService resetTokenService;
+    private final ResetTokenServiceImpl resetTokenService;
     private final SubscriptionServiceImpl subscriptionService;
     private final SubscriptionDTOMapper subscriptionMapper;
     @Value("${domain}")

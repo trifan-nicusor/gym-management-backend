@@ -1,36 +1,13 @@
 package com.gymmanagement.security.token.reset;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.Optional;
 
-@Service
-@RequiredArgsConstructor
-public class ResetTokenService {
+public interface ResetTokenService {
+    Optional<ResetToken> findByToken(String token);
 
-    private final ResetTokenRepository resetTokenRepository;
+    ResetToken getUserLastToken(Long id);
 
-    public Optional<ResetToken> findByToken(String token) {
-        return resetTokenRepository.findByToken(token);
-    }
+    boolean hasTokenAvailable(Long id);
 
-    public ResetToken getUserLastToken(Long id) {
-        return resetTokenRepository.getUserLastToken(id);
-    }
-
-    public boolean hasTokenAvailable(Long id) {
-        if (getUserLastToken(id) == null) {
-            return false;
-        }
-
-        return !getUserLastToken(id)
-                .getExpiresAt()
-                .isBefore(LocalDateTime.now());
-    }
-
-    public boolean isTokenPresent(String token) {
-        return findByToken(token).isPresent();
-    }
+    boolean isTokenPresent(String token);
 }
