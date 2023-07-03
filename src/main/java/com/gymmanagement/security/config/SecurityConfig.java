@@ -32,6 +32,8 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/api/v1/discipline/**")
                         .permitAll()
+                        .requestMatchers("/api/v1/subscription/**")
+                        .permitAll()
                         .anyRequest()
                         .authenticated())
                 .sessionManagement((session) -> session
