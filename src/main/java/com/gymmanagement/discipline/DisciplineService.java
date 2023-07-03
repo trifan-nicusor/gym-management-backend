@@ -7,15 +7,15 @@ public interface DisciplineService {
 
     void saveDiscipline(DisciplineRequest request);
 
-    DisciplineDTO getDiscipline(Long id);
+    DisciplineDTO getDiscipline(int id);
 
-    void deleteDiscipline(Long id);
+    void deleteDiscipline(int id);
 
-    void updateDiscipline(Long id, DisciplineRequest request);
-
-    Discipline loadDisciplineById(Long id);
+    void updateDiscipline(int id, DisciplineRequest request);
 
     boolean isDisciplineSaved(String name);
 
-    boolean disciplineExists(Long id);
+    Discipline loadDisciplineById(int id);
+
+    boolean disciplineExists(int id);
 }

@@ -43,7 +43,7 @@ public class DisciplineController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DisciplineDTO> getDiscipline(@PathVariable Long id) {
+    public ResponseEntity<DisciplineDTO> getDiscipline(@PathVariable int id) {
 
         if (disciplineService.disciplineExists(id)) {
             return new ResponseEntity<>(disciplineService.getDiscipline(id), HttpStatus.OK);
@@ -53,7 +53,7 @@ public class DisciplineController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteDiscipline(@PathVariable Long id) {
+    public ResponseEntity<String> deleteDiscipline(@PathVariable int id) {
 
         if (disciplineService.disciplineExists(id)) {
             disciplineService.deleteDiscipline(id);
@@ -64,7 +64,7 @@ public class DisciplineController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<String> updateEquipment(@PathVariable Long id,
+    public ResponseEntity<String> updateEquipment(@PathVariable int id,
                                                   @RequestBody DisciplineRequest request) {
         if (disciplineService.disciplineExists(id)) {
             disciplineService.updateDiscipline(id, request);

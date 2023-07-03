@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DisciplineDTO {
-    private Long id;
+    private int id;
     private String name;
     private String shortDescription;
     private String longDescription;

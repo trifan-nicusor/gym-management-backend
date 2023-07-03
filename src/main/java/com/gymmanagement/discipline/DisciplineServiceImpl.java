@@ -37,19 +37,19 @@ public class DisciplineServiceImpl implements DisciplineService {
     }
 
     @Override
-    public DisciplineDTO getDiscipline(Long id) {
+    public DisciplineDTO getDiscipline(int id) {
         return disciplineMapper.apply(loadDisciplineById(id));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
-    public void deleteDiscipline(Long id) {
-        disciplineRepository.deleteById(id);
+    public void deleteDiscipline(int id) {
+        disciplineRepository.deleteById((long) id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
-    public void updateDiscipline(Long id, DisciplineRequest request) {
+    public void updateDiscipline(int id, DisciplineRequest request) {
         Discipline discipline = loadDisciplineById(id);
 
         if (request.getName() != null) {
@@ -72,8 +72,8 @@ public class DisciplineServiceImpl implements DisciplineService {
     }
 
     @Override
-    public Discipline loadDisciplineById(Long id) {
-        return disciplineRepository.findById(id).orElseThrow();
+    public Discipline loadDisciplineById(int id) {
+        return disciplineRepository.findById((long) id).orElseThrow();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class DisciplineServiceImpl implements DisciplineService {
     }
 
     @Override
-    public boolean disciplineExists(Long id) {
-        return disciplineRepository.findById(id).isPresent();
+    public boolean disciplineExists(int id) {
+        return disciplineRepository.findById((long) id).isPresent();
     }
 }

@@ -4,7 +4,6 @@ import com.gymmanagement.discipline.Discipline;
 import com.gymmanagement.discipline.DisciplineService;
 import com.gymmanagement.security.user.User;
 import com.gymmanagement.security.user.UserRepository;
-import com.gymmanagement.security.user.UserService;
 import com.gymmanagement.subscription.joinentity.UserSubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +23,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     private final DisciplineService disciplineService;
     private final UserRepository userRepository;
     private final SubscriptionDTOMapper subscriptionMapper;
-    private final UserService userService;
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Override
@@ -59,7 +57,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         List<Discipline> disciplineList = new ArrayList<>();
 
         request.getDisciplineList().forEach(id -> {
-            Discipline discipline = disciplineService.loadDisciplineById(id);
+            Discipline discipline = disciplineService.loadDisciplineById(id.intValue());
             disciplineList.add(discipline);
         });
 
@@ -108,7 +106,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             List<Discipline> disciplineList = new ArrayList<>();
 
             request.getDisciplineList().forEach(id -> {
-                Discipline discipline = disciplineService.loadDisciplineById(id);
+                Discipline discipline = disciplineService.loadDisciplineById(id.intValue());
                 disciplineList.add(discipline);
             });
 
@@ -118,7 +116,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     public List<SubscriptionDTO> getMySubscriptions() {
-        String email = userService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getUsername();
+        String email = userRepository.loadByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).getUsername();
         List<Long> subscriptionIds = userSubscriptionRepository.getAllCurrentSubscriptions(userRepository.loadByEmail(email).getId());
         List<Subscription> mySubscriptions = new ArrayList<>();
 
