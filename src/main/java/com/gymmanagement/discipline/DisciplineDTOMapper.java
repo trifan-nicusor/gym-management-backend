@@ -1,7 +1,6 @@
 package com.gymmanagement.discipline;
 
 import org.springframework.stereotype.Service;
-
 import java.util.function.Function;
 
 @Service
