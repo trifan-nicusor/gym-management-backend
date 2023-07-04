@@ -11,7 +11,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     @Query("SELECT s" +
             " FROM Subscription s" +
-            " WHERE s.active = true")
+            " WHERE s.isActive = true")
     List<Subscription> findAllSubscription();
 
     @Query("SELECT s" +

@@ -34,7 +34,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         activeSubs.forEach(id -> {
             Subscription subscription = loadSubscriptionById(id.intValue());
 
-            subscription.setAvailable(Boolean.FALSE);
+            subscription.setIsAvailable(Boolean.FALSE);
         });
 
         return subscriptions.stream()
@@ -47,7 +47,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     public void saveSubscription(SubscriptionRequest request) {
         var subscription = Subscription.builder()
                 .name(request.getName())
-                .active(request.getActive())
+                .isActive(request.getIsActive())
                 .duration(request.getDuration())
                 .description(request.getDescription())
                 .price(request.getPrice())
@@ -86,8 +86,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             subscription.setName(request.getName());
         }
 
-        if (request.getActive() != null) {
-            subscription.setActive(request.getActive());
+        if (request.getIsActive() != null) {
+            subscription.setActive(request.getIsActive());
         }
 
         if (request.getDuration() != null) {

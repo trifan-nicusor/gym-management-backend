@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class SubscriptionRequest {
     private String name;
-    private Boolean active;
+    private Boolean isActive;
     private Integer duration;
     private String description;
     private Integer price;

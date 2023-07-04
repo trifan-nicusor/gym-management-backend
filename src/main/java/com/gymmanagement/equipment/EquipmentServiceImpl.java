@@ -31,7 +31,7 @@ public class EquipmentServiceImpl implements EquipmentService {
                 .goals(request.getGoals())
                 .positioning(request.getPositioning())
                 .execution(request.getExecution())
-                .active(request.getActive())
+                .isActive(request.getIsActive())
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -74,8 +74,8 @@ public class EquipmentServiceImpl implements EquipmentService {
             equipment.setExecution(request.getExecution());
         }
 
-        if (request.getActive() != null && request.getActive() != equipment.isActive()) {
-            equipment.setActive(request.getActive());
+        if (request.getIsActive() != null && request.getIsActive() != equipment.isActive()) {
+            equipment.setActive(request.getIsActive());
         }
 
         equipmentRepository.save(equipment);

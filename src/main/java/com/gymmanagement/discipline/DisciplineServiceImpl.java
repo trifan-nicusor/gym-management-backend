@@ -29,7 +29,7 @@ public class DisciplineServiceImpl implements DisciplineService {
                 .name(request.getName())
                 .shortDescription(request.getShortDescription())
                 .longDescription(request.getLongDescription())
-                .active(request.getActive())
+                .isActive(request.getIsActive())
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -64,8 +64,8 @@ public class DisciplineServiceImpl implements DisciplineService {
             discipline.setLongDescription(request.getLongDescription());
         }
 
-        if (request.getActive() != null && request.getActive() != discipline.isActive()) {
-            discipline.setActive(request.getActive());
+        if (request.getIsActive() != null && request.getIsActive() != discipline.isActive()) {
+            discipline.setActive(request.getIsActive());
         }
 
         disciplineRepository.save(discipline);

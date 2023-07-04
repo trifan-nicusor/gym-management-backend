@@ -11,7 +11,7 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
 
     @Query("SELECT e" +
             " FROM Equipment e" +
-            " WHERE e.active = true")
+            " WHERE e.isActive = true")
     List<Equipment> findAllEquipments();
 
     @Query("SELECT e" +

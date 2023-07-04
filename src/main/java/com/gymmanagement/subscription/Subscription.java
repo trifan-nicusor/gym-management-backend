@@ -31,11 +31,11 @@ public class Subscription {
     private int id;
     @Column(unique = true)
     private String name;
-    private boolean active;
+    private boolean isActive;
     private int duration;
     private String description;
     private int price;
-    private Boolean available;
+    private Boolean isAvailable;
     private LocalDateTime createdAt;
     @ManyToMany(fetch = FetchType.LAZY,
             cascade =

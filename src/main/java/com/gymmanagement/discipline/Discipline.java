@@ -32,7 +32,7 @@ public class Discipline {
     private String name;
     private String shortDescription;
     private String longDescription;
-    private boolean active;
+    private boolean isActive;
     private LocalDateTime createdAt;
     @ManyToMany(fetch = FetchType.LAZY,
             cascade =

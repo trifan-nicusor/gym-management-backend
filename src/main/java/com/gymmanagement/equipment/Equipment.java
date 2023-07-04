@@ -27,6 +27,6 @@ public class Equipment {
     private String goals;
     private String positioning;
     private String execution;
-    private boolean active;
+    private boolean isActive;
     private LocalDateTime createdAt;
 }

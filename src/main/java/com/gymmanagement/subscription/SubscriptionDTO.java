@@ -14,10 +14,10 @@ import java.util.List;
 public class SubscriptionDTO {
     private int id;
     private String name;
-    private boolean active;
+    private boolean isActive;
     private int duration;
     private String description;
     private int price;
-    private Boolean available;
+    private Boolean isAvailable;
     private List<DisciplineDTO> disciplineList;
 }

@@ -17,11 +17,11 @@ public class SubscriptionDTOMapper implements Function<Subscription, Subscriptio
         return new SubscriptionDTO(
                 subscription.getId(),
                 subscription.getName(),
-                subscription.isActive(),
+                subscription.getIsAvailable(),
                 subscription.getDuration(),
                 subscription.getDescription(),
                 subscription.getPrice(),
-                subscription.getAvailable(),
+                subscription.getIsAvailable(),
                 subscription.getDisciplineList()
                         .stream()
                         .map(disciplineDTOMapper)
