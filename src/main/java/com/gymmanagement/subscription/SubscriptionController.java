@@ -73,15 +73,4 @@ public class SubscriptionController {
 
         return ResponseEntity.badRequest().build();
     }
-
-    @GetMapping("/me/info")
-    public ResponseEntity<List<SubscriptionDTO>> getMySubscriptions() {
-        List<SubscriptionDTO> subscriptions = subscriptionService.getMySubscriptions();
-
-        if( subscriptions.size() > 0) {
-            return new ResponseEntity<>(subscriptionService.getMySubscriptions(), HttpStatus.OK);
-        }
-
-        return ResponseEntity.notFound().build();
-    }
 }

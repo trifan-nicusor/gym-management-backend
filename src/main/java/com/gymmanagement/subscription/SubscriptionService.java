@@ -13,8 +13,6 @@ public interface SubscriptionService {
 
     void updateSubscription(int id, SubscriptionRequest request);
 
-    List<SubscriptionDTO> getMySubscriptions();
-
     Subscription loadSubscriptionById(int id);
 
     boolean isSubscriptionSaved(String name);
