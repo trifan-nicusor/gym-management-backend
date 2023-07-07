@@ -31,7 +31,7 @@ public class EquipmentServiceImpl implements EquipmentService {
                 .goals(request.getGoals())
                 .positioning(request.getPositioning())
                 .execution(request.getExecution())
-                .isActive(request.getIsActive())
+                .isActive(true)
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -40,19 +40,21 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public EquipmentDTO getEquipment(int id) {
-        return equipmentMapper.apply(loadEquipmentById(id));
+        Equipment equipment = equipmentRepository.getEquipmentById((long) id).orElseThrow();
+
+        return equipmentMapper.apply(equipment);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public void deleteEquipment(int id) {
-        equipmentRepository.deleteById((long) id);
+        equipmentRepository.disableEquipment(id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public void updateEquipment(int id, EquipmentRequest request) {
-        Equipment equipment = loadEquipmentById(id);
+        Equipment equipment = equipmentRepository.findById((long) id).orElseThrow();
 
         if (request.getName() != null) {
             equipment.setName(request.getName());
@@ -74,25 +76,16 @@ public class EquipmentServiceImpl implements EquipmentService {
             equipment.setExecution(request.getExecution());
         }
 
-        if (request.getIsActive() != null && request.getIsActive() != equipment.isActive()) {
-            equipment.setActive(request.getIsActive());
-        }
-
         equipmentRepository.save(equipment);
     }
 
     @Override
-    public Equipment loadEquipmentById(int id) {
-        return equipmentRepository.findById((long) id).orElseThrow();
-    }
-
-    @Override
-    public boolean isEquipmentSaved(String name) {
+    public boolean equipmentExists(String name) {
         return equipmentRepository.findByName(name).isPresent();
     }
 
     @Override
     public boolean equipmentExists(int id) {
-        return equipmentRepository.findById((long) id).isPresent();
+        return equipmentRepository.getEquipmentById((long) id).isPresent();
     }
 }

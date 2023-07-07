@@ -33,9 +33,9 @@ public class EquipmentController {
 
     @PostMapping
     public ResponseEntity<String> saveEquipment(@RequestBody EquipmentRequest request) {
-        equipmentService.saveEquipment(request);
 
-        if (equipmentService.isEquipmentSaved(request.getName())) {
+        if (!equipmentService.equipmentExists(request.getName())) {
+            equipmentService.saveEquipment(request);
             return new ResponseEntity<>("Equipment successfully added!", HttpStatus.CREATED);
         }
 
