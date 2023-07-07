@@ -13,9 +13,9 @@ public interface DisciplineService {
 
     void updateDiscipline(int id, DisciplineRequest request);
 
-    boolean isDisciplineSaved(String name);
-
     Discipline loadDisciplineById(int id);
+
+    boolean isDisciplineSaved(String name);
 
     boolean disciplineExists(int id);
 }
