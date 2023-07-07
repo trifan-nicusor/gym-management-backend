@@ -48,6 +48,7 @@ public class UserService implements UserDetailsService {
         return userRepository.loadByEmail(email);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public void changePassword(UserDetails user, String password) {
         userRepository.updatePassword(user.getUsername(), passwordEncoder.encode(password));
     }
@@ -86,7 +87,6 @@ public class UserService implements UserDetailsService {
         emailSender.send(email, emailBuilderService.forgotPasswordEmailBuilder(user.getFirstName(), link));
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public void resetPassword(ResetToken token, String password) {
         User user = token.getUser();
         resetTokenService.getUserLastToken(user.getId()).setExpiresAt(LocalDateTime.now());

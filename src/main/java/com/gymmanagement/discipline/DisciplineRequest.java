@@ -13,5 +13,4 @@ public class DisciplineRequest {
     private String name;
     private String shortDescription;
     private String longDescription;
-    private Boolean isActive;
 }

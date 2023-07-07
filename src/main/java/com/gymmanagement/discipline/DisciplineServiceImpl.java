@@ -29,7 +29,7 @@ public class DisciplineServiceImpl implements DisciplineService {
                 .name(request.getName())
                 .shortDescription(request.getShortDescription())
                 .longDescription(request.getLongDescription())
-                .isActive(request.getIsActive())
+                .isActive(true)
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -38,13 +38,15 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     @Override
     public DisciplineDTO getDiscipline(int id) {
-        return disciplineMapper.apply(loadDisciplineById(id));
+        Discipline discipline = disciplineRepository.getDisciplineById(id).orElseThrow();
+
+        return disciplineMapper.apply(discipline);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public void deleteDiscipline(int id) {
-        disciplineRepository.deleteById((long) id);
+        disciplineRepository.disableDiscipline(id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -64,10 +66,6 @@ public class DisciplineServiceImpl implements DisciplineService {
             discipline.setLongDescription(request.getLongDescription());
         }
 
-        if (request.getIsActive() != null && request.getIsActive() != discipline.isActive()) {
-            discipline.setActive(request.getIsActive());
-        }
-
         disciplineRepository.save(discipline);
     }
 
@@ -83,6 +81,6 @@ public class DisciplineServiceImpl implements DisciplineService {
 
     @Override
     public boolean disciplineExists(int id) {
-        return disciplineRepository.findById((long) id).isPresent();
+        return disciplineRepository.getDisciplineById(id).isPresent();
     }
 }

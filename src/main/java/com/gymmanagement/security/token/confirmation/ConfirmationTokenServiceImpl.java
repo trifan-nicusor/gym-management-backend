@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class ConfirmationTokenServiceImpl implements ConfirmationTokenService{
+public class ConfirmationTokenServiceImpl {
 
     private final ConfirmationTokenRepository confirmationTokenRepository;
 

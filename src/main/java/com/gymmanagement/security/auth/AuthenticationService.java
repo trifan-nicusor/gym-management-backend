@@ -56,6 +56,7 @@ public class AuthenticationService {
                 .role(UserRole.USER)
                 .updatedAt(LocalDateTime.now())
                 .isEnabled(false)
+                .isLocked(false)
                 .build();
 
         var savedUser = userRepository.save(user);
