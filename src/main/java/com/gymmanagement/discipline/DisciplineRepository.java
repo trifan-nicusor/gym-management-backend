@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface DisciplineRepository extends JpaRepository<Discipline, Long> {
+
     @Query("SELECT d" +
             " FROM Discipline d" +
             " WHERE d.isActive = true")
