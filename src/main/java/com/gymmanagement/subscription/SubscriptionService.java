@@ -15,7 +15,7 @@ public interface SubscriptionService {
 
     Subscription loadSubscriptionById(int id);
 
-    boolean isSubscriptionSaved(String name);
+    boolean subscriptionExists(String name);
 
     boolean subscriptionExists(int id);
 }

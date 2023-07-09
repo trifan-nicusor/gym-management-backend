@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/equipment")
+@RequestMapping("/api/v1/equipments")
 public class EquipmentController {
 
     private final EquipmentServiceImpl equipmentService;

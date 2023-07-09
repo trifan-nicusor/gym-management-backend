@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/discipline")
+@RequestMapping("/api/v1/disciplines")
 public class DisciplineController {
 
     private final DisciplineServiceImpl disciplineService;

@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/subscription")
+@RequestMapping("/api/v1/subscriptions")
 public class SubscriptionController {
 
     private final SubscriptionServiceImpl subscriptionService;
@@ -32,9 +32,9 @@ public class SubscriptionController {
     }
 
     @PostMapping
-    public ResponseEntity<String> saveSubscription(@RequestBody SubscriptionRequest sRequest) {
-        if (!subscriptionService.isSubscriptionSaved(sRequest.getName())) {
-            subscriptionService.saveSubscription(sRequest);
+    public ResponseEntity<String> saveSubscription(@RequestBody SubscriptionRequest request) {
+        if (!subscriptionService.subscriptionExists(request.getName())) {
+            subscriptionService.saveSubscription(request);
 
             return new ResponseEntity<>("Subscription successfully added!", HttpStatus.CREATED);
         }

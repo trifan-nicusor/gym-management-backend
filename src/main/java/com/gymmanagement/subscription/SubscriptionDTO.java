@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Data
 @Builder
@@ -12,9 +13,8 @@ import lombok.NoArgsConstructor;
 public class SubscriptionDTO {
     private int id;
     private String name;
-    private boolean isActive;
     private int duration;
     private String description;
     private int price;
-    private Boolean isAvailable;
+    private List<String> disciplineNameList;
 }

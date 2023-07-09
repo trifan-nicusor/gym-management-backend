@@ -25,6 +25,6 @@ public class Discipline {
     private String name;
     private String shortDescription;
     private String longDescription;
-    private boolean isActive;
+    private Boolean isActive;
     private LocalDateTime createdAt;
 }

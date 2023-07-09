@@ -12,9 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 public class SubscriptionRequest {
     private String name;
-    private Boolean isActive;
     private Integer duration;
     private String description;
     private Integer price;
-    List<Integer> disciplineList;
+    List<Long> disciplineList;
 }
