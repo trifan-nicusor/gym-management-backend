@@ -1,5 +1,6 @@
 package com.gymmanagement.security.user;
 
+import com.gymmanagement.cart.Cart;
 import com.gymmanagement.security.token.confirmation.ConfirmationToken;
 import com.gymmanagement.security.token.jwt.JwtToken;
 import com.gymmanagement.security.token.reset.ResetToken;
@@ -57,26 +58,11 @@ public class User implements UserDetails {
             cascade = CascadeType.ALL
     )
     private List<ConfirmationToken> confirmationTokenList;
-
-    public User(String email,
-                String password,
-                String firstName,
-                String lastName,
-                UserRole role,
-                boolean isLocked,
-                boolean isEnabled,
-                LocalDateTime updatedAt,
-                LocalDateTime confirmedAt) {
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.role = role;
-        this.isLocked = isLocked;
-        this.isEnabled = isEnabled;
-        this.updatedAt = updatedAt;
-        this.confirmedAt = confirmedAt;
-    }
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL
+    )
+    private List<Cart> carts;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
