@@ -16,5 +16,5 @@ public class SubscriptionDTO {
     private int duration;
     private String description;
     private int price;
-    private List<String> disciplineNameList;
+    private List<String> disciplineNames;
 }

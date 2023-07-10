@@ -32,10 +32,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
     public void saveSubscription(SubscriptionRequest request) {
-        List<Discipline> disciplineList = new ArrayList<>();
+        List<Discipline> disciplines = new ArrayList<>();
 
-        if (request.getDisciplineList().size() > 0) {
-            request.getDisciplineList().forEach(id -> disciplineList.add(disciplineRepository.findById(id).orElseThrow()));
+        if (request.getDisciplineIds().size() > 0) {
+            request.getDisciplineIds().forEach(id -> disciplines.add(disciplineRepository.findById(id).orElseThrow()));
         }
 
         var subscription = Subscription.builder()
@@ -45,7 +45,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                 .description(request.getDescription())
                 .price(request.getPrice())
                 .createdAt(LocalDateTime.now())
-                .disciplineList(disciplineList)
+                .disciplines(disciplines)
                 .build();
 
         subscriptionRepository.save(subscription);
@@ -85,13 +85,13 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             subscription.setPrice(request.getPrice());
         }
 
-        if (request.getDisciplineList().size() > 0) {
+        if (request.getDisciplineIds().size() > 0) {
             subscriptionRepository.deleteIdsFromJoinTable((long) subscription.getId());
 
-            request.getDisciplineList().forEach(discipline -> {
+            request.getDisciplineIds().forEach(discipline -> {
                 Discipline disciplineToSave = disciplineRepository.findById(discipline).orElseThrow();
 
-                subscription.getDisciplineList().add(disciplineToSave);
+                subscription.getDisciplines().add(disciplineToSave);
             });
 
             subscriptionRepository.save(subscription);
@@ -114,17 +114,17 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     private Subscription removeInactiveDiscipline(Subscription subscription) {
-        List<Discipline> disciplines = subscription.getDisciplineList();
-        List<Discipline> listToRemove = new ArrayList<>();
+        List<Discipline> disciplines = subscription.getDisciplines();
+        List<Discipline> disciplinesToRemove = new ArrayList<>();
 
         disciplines.forEach(discipline -> {
             if (!discipline.getIsActive()) {
-                listToRemove.add(discipline);
+                disciplinesToRemove.add(discipline);
             }
         });
 
-        disciplines.removeAll(listToRemove);
-        subscription.setDisciplineList(disciplines);
+        disciplines.removeAll(disciplinesToRemove);
+        subscription.setDisciplines(disciplines);
 
         return subscription;
     }

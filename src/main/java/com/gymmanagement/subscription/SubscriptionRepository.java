@@ -35,6 +35,8 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     @Transactional
     @Modifying
-    @Query(value = "DELETE FROM `subscription_discipline` WHERE subscription_id = ?1", nativeQuery = true)
+    @Query(value = "DELETE FROM `subscription_discipline`" +
+            " WHERE subscription_id = ?1",
+            nativeQuery = true)
     void deleteIdsFromJoinTable(Long id);
 }

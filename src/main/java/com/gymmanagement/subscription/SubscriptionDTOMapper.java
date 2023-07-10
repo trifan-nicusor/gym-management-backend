@@ -17,7 +17,7 @@ public class SubscriptionDTOMapper implements Function<Subscription, Subscriptio
                 subscription.getDuration(),
                 subscription.getDescription(),
                 subscription.getPrice(),
-                subscription.getDisciplineList()
+                subscription.getDisciplines()
                         .stream()
                         .map(Discipline::getName)
                         .collect(Collectors.toList())

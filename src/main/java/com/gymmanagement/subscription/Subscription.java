@@ -53,5 +53,5 @@ public class Subscription {
                     nullable = false,
                     updatable = false)
     )
-    private List<Discipline> disciplineList;
+    private List<Discipline> disciplines;
 }
