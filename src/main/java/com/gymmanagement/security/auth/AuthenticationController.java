@@ -59,7 +59,7 @@ public class AuthenticationController {
         return new ResponseEntity<>("Expired link!", HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/resend-confirm-account")
+    @PostMapping("/resend-confirmation-email")
     public ResponseEntity<String> resendConfirmationEmail(@RequestBody EmailRequest request) {
         String email = request.getEmail();
 
