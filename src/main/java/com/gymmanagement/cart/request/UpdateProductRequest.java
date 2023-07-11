@@ -1,4 +1,4 @@
-package com.gymmanagement.cart;
+package com.gymmanagement.cart.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartRequest {
-    private int subscriptionId;
+public class UpdateProductRequest {
+    private Long quantity;
 }
