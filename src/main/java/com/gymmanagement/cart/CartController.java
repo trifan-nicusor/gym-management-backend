@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/carts")
+@RequestMapping("/api/v1/cart")
 public class CartController {
 
     private final CartServiceImpl cartService;
@@ -25,7 +25,11 @@ public class CartController {
     public ResponseEntity<CartDTO> getAllSubscriptions() {
         CartDTO cart = cartService.getCart();
 
-        return new ResponseEntity<>(cart, HttpStatus.OK);
+        if (cart != null) {
+            return new ResponseEntity<>(cart, HttpStatus.OK);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
