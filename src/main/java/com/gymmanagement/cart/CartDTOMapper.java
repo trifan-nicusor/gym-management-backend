@@ -20,25 +20,33 @@ public class CartDTOMapper implements Function<Cart, CartDTO> {
     @Override
     public CartDTO apply(Cart cart) {
         List<Product> products = cart.getProducts();
-        long total;
         List<Long> prices = new ArrayList<>();
+        long total;
 
-        products.forEach(product -> {
-            long price = subscriptionRepository.findSubscriptionById(product.getSubscriptionId().intValue())
-                    .orElseThrow()
-                    .getPrice();
+        if (products != null) {
+            products.forEach(product -> {
+                long price = subscriptionRepository.findSubscriptionById(product.getSubscriptionId().intValue())
+                        .orElseThrow()
+                        .getPrice();
 
-            prices.add(price * product.getQuantity());
-        });
+                prices.add(price * product.getQuantity());
+            });
 
-        total = prices.stream().mapToLong(Long::longValue).sum();
+            total = prices.stream().mapToLong(Long::longValue).sum();
+
+            return new CartDTO(
+                    cart.getId(),
+                    products.stream()
+                            .map(productMapper)
+                            .collect(Collectors.toList()),
+                    total
+            );
+        }
 
         return new CartDTO(
                 cart.getId(),
-                products.stream()
-                        .map(productMapper)
-                        .collect(Collectors.toList()),
-                total
+                null,
+                0L
         );
     }
 }
