@@ -13,6 +13,5 @@ import lombok.NoArgsConstructor;
 public class ProductDTO {
     private Long id;
     private SubscriptionDTO subscription;
-    private Long total;
     private Long quantity;
 }
