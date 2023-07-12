@@ -17,13 +17,11 @@ public class ProductDTOMapper implements Function<Product, ProductDTO> {
     @Override
     public ProductDTO apply(Product product) {
         SubscriptionDTO subscription = subscriptionMapper.apply(subscriptionRepository.findSubscriptionById(product.getSubscriptionId().intValue()).orElseThrow());
-        Long total = subscription.getPrice() * product.getQuantity();
 
         return new ProductDTO(
                 product.getId(),
                 subscription,
-                product.getQuantity(),
-                total
+                product.getQuantity()
         );
     }
 }
