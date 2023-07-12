@@ -25,11 +25,7 @@ public class CartController {
     public ResponseEntity<CartDTO> getAllSubscriptions() {
         CartDTO cart = cartService.getCart();
 
-        if (cart != null) {
-            return new ResponseEntity<>(cart, HttpStatus.OK);
-        }
-
-        return ResponseEntity.notFound().build();
+        return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
     @PostMapping
