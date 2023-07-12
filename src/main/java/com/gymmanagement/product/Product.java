@@ -23,7 +23,6 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long quantity;
     @Column(name = "subscription_id")
     private Long subscriptionId;
     @ManyToOne
@@ -32,4 +31,5 @@ public class Product {
             name = "cart_id"
     )
     private Cart cart;
+    private Long quantity;
 }
