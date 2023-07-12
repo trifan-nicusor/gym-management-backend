@@ -2,6 +2,7 @@ package com.gymmanagement.cart;
 
 import com.gymmanagement.cart.request.AddProductRequest;
 import com.gymmanagement.cart.request.UpdateProductRequest;
+import com.gymmanagement.product.Product;
 import com.gymmanagement.security.user.User;
 import com.gymmanagement.security.user.UserRepository;
 import com.gymmanagement.security.user.UserService;
@@ -11,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import java.util.Collections;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +29,20 @@ public class CartServiceImpl implements CartService {
         User user = userService.loadByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         Cart cart = user.getCart();
 
-        return cartMapper.apply(cart);
+        if (cart != null) {
+            return cartMapper.apply(cart);
+        }
+
+        var newCart = Cart.builder()
+                .user(user)
+                .isOrdered(false)
+                .build();
+
+        user.setCart(newCart);
+
+        userRepository.save(user);
+
+        return cartMapper.apply(user.getCart());
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
@@ -48,20 +60,18 @@ public class CartServiceImpl implements CartService {
 
         var cart = user.getCart();
 
-        if (cart.getSubscriptions() != null && cart.getSubscriptions().contains(subscription)) {
+        if (cart.getSubscriptions().contains(subscription)) {
             cartRepository.increaseQuantity(cart.getId(), (long) subscription.getId());
-        }
-
-        if (cart.getSubscriptions() == null) {
-            cart.setSubscriptions(Collections.singletonList(subscription));
         } else {
-            List<Subscription> subscriptions = cart.getSubscriptions();
-            subscriptions.add(subscription);
-
-            cart.setSubscriptions(subscriptions);
+            cart.getProducts().add(
+                    Product.builder()
+                            .subscriptionId((long) subscription.getId())
+                            .quantity(1L)
+                            .cart(cart)
+                            .build()
+            );
         }
 
-        user.setCart(cart);
         userRepository.save(user);
     }
 
